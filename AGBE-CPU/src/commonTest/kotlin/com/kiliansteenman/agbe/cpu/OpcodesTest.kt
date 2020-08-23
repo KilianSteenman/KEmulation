@@ -57,6 +57,28 @@ class OpcodesTest {
         LdOpcode(0x6D, 'L', 'L'),
     )
 
+    internal data class Ld8BitValueOpcode(val opcode: Byte, val register: Char)
+
+    private val ld8BitValue = arrayOf(
+        Ld8BitValueOpcode(0x06, 'B'),
+        Ld8BitValueOpcode(0x0E, 'C'),
+        Ld8BitValueOpcode(0x16, 'D'),
+        Ld8BitValueOpcode(0x1E, 'E'),
+        Ld8BitValueOpcode(0x26, 'H'),
+        Ld8BitValueOpcode(0x2E, 'L')
+    )
+
+    @Test
+    fun opcode_LD_8_bit_value() {
+        ld8BitValue.forEach {
+            registers.reset()
+
+            performProgram(byteArrayOf(it.opcode, 2))
+
+            verifyRegister(2, it.register)
+        }
+    }
+
     @Test
     fun opcode_LD_r1_r2() {
         ldR1R2Opcodes.forEach {
@@ -66,7 +88,7 @@ class OpcodesTest {
 
             performProgram(byteArrayOf(it.opcode))
 
-            verifyRegister(1, registers.getValue(it.r1), it.r1)
+            verifyRegister(1, it.r1)
         }
     }
 
@@ -113,7 +135,8 @@ class OpcodesTest {
         cpu.run(program)
     }
 
-    private fun verifyRegister(value: Byte, registerValue: Byte, register: Char) {
+    private fun verifyRegister(value: Byte, register: Char) {
+        val registerValue = registers.getValue(register)
         assertEquals(value, registerValue, "Expected register $register to be $value but found $registerValue")
     }
 }
