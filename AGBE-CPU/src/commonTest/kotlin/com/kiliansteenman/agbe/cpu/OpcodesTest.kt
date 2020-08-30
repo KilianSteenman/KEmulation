@@ -1,7 +1,6 @@
 package com.kiliansteenman.agbe.cpu
 
 import kotlin.test.Test
-import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 @ExperimentalStdlibApi
@@ -77,7 +76,7 @@ class OpcodesTest {
 
             performProgram(byteArrayOf(it.opcode, 2))
 
-            verifyRegister(2, it.register)
+            registers.assertRegister(2, it.register)
         }
     }
 
@@ -97,7 +96,7 @@ class OpcodesTest {
 
             performProgram(byteArrayOf(it.opcode, 0x0, 0x0.toByte()))
 
-            verifyRegister(0, it.register)
+            registers.assertRegister(0, it.register)
         }
     }
 
@@ -110,7 +109,7 @@ class OpcodesTest {
 
             performProgram(byteArrayOf(it.opcode))
 
-            verifyRegister(1, it.r1)
+            registers.assertRegister(1, it.r1)
         }
     }
 
@@ -121,7 +120,7 @@ class OpcodesTest {
 
         performProgram(byteArrayOf(0xF9.toByte()))
 
-        verifyRegister(257, "SP")
+        registers.assertRegister(257, "SP")
     }
 
     @Test
@@ -134,69 +133,10 @@ class OpcodesTest {
     fun opcode_LD_nn_SP() {
         performProgram(byteArrayOf(0x08, 0x01, 0x01))
 
-        verifyRegister(257, "SP")
-    }
-
-    private fun Registers.reset() {
-        a = 0
-        b = 0
-        c = 0
-        d = 0
-        e = 0
-        f = 0
-        h = 0
-        l = 0
-    }
-
-    private fun Registers.setValue(register: Char, value: Int) {
-        when (register) {
-            'A' -> a = value
-            'B' -> b = value
-            'C' -> c = value
-            'D' -> d = value
-            'E' -> e = value
-            'F' -> f = value
-            'H' -> h = value
-            'L' -> l = value
-            else -> throw IllegalArgumentException("Unknown register $register")
-        }
-    }
-
-    private fun Registers.getValue(register: Char): Int {
-        return when (register) {
-            'A' -> a
-            'B' -> b
-            'C' -> c
-            'D' -> d
-            'E' -> e
-            'F' -> f
-            'H' -> h
-            'L' -> l
-            else -> throw IllegalArgumentException("Unknown register $register")
-        }
-    }
-
-    private fun Registers.getShortValue(register: String): Int {
-        return when (register) {
-            "BC" -> bc
-            "DE" -> de
-            "HL" -> hl
-            "SP" -> sp
-            else -> throw IllegalArgumentException("Unknown register $register")
-        }
+        registers.assertRegister(257, "SP")
     }
 
     private fun performProgram(program: ByteArray) {
         cpu.run(program)
-    }
-
-    private fun verifyRegister(value: Int, register: Char) {
-        val registerValue = registers.getValue(register)
-        assertEquals(value, registerValue, "Expected register $register to be $value but found $registerValue")
-    }
-
-    private fun verifyRegister(value: Int, register: String) {
-        val registerValue = registers.getShortValue(register)
-        assertEquals(value, registerValue, "Expected register $register to be $value but found $registerValue")
     }
 }

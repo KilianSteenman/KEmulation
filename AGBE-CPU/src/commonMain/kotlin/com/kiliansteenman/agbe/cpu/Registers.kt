@@ -11,8 +11,8 @@ class Registers {
     var f: Int = 0
     var h: Int = 0
     var l: Int = 0
-    var s: Int = 0
-    var p: Int = 0
+    var s: Int = 0xFF
+    var p: Int = 0xFE
 
     var bc: Int
         get() {
