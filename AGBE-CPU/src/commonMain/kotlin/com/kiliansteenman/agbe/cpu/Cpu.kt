@@ -1,5 +1,6 @@
 package com.kiliansteenman.agbe.cpu
 
+@ExperimentalStdlibApi
 class Cpu(
     private val registers: Registers = Registers(),
     private val memoryMap: MemoryMap
@@ -17,7 +18,7 @@ class Cpu(
         if (operation == null) {
             throw NotImplementedError("Operation 0x${program[0].toString(16)} not implemented")
         } else {
-            operation(registers, arguments)
+            operation(registers, arguments, memoryMap)
         }
     }
 }

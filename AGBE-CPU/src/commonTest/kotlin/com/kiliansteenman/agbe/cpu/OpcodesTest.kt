@@ -3,6 +3,7 @@ package com.kiliansteenman.agbe.cpu
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
+@ExperimentalStdlibApi
 class OpcodesTest {
 
     private val registers = Registers()
@@ -79,6 +80,26 @@ class OpcodesTest {
         }
     }
 
+    internal data class Ld16BitValueOpcode(val opcode: Byte, val register: String)
+
+    private val ld16BitValue = arrayOf(
+        Ld16BitValueOpcode(0x01, "BC"),
+        Ld16BitValueOpcode(0x11, "DE"),
+        Ld16BitValueOpcode(0x21, "HL"),
+        Ld16BitValueOpcode(0x31, "SP"),
+    )
+
+    @Test
+    fun opcode_LD_16_bit_value() {
+        ld16BitValue.forEach {
+            registers.reset()
+
+            performProgram(byteArrayOf(it.opcode, 0x0, 0x0.toByte()))
+
+            verifyRegister(0, it.register)
+        }
+    }
+
     @Test
     fun opcode_LD_r1_r2() {
         ldR1R2Opcodes.forEach {
@@ -92,6 +113,16 @@ class OpcodesTest {
         }
     }
 
+    @Test
+    fun opcode_LD_SP_HL() {
+        registers.h = 0x01
+        registers.l = 0x01
+
+        performProgram(byteArrayOf(0xF9.toByte()))
+
+        verifyRegister(257, "SP")
+    }
+
     private fun Registers.reset() {
         a = 0
         b = 0
@@ -103,7 +134,7 @@ class OpcodesTest {
         l = 0
     }
 
-    private fun Registers.setValue(register: Char, value: Byte) {
+    private fun Registers.setValue(register: Char, value: Int) {
         when (register) {
             'A' -> a = value
             'B' -> b = value
@@ -117,7 +148,7 @@ class OpcodesTest {
         }
     }
 
-    private fun Registers.getValue(register: Char): Byte {
+    private fun Registers.getValue(register: Char): Int {
         return when (register) {
             'A' -> a
             'B' -> b
@@ -131,12 +162,27 @@ class OpcodesTest {
         }
     }
 
+    private fun Registers.getShortValue(register: String): Int {
+        return when (register) {
+            "BC" -> bc
+            "DE" -> de
+            "HL" -> hl
+            "SP" -> sp
+            else -> throw IllegalArgumentException("Unknown register $register")
+        }
+    }
+
     private fun performProgram(program: ByteArray) {
         cpu.run(program)
     }
 
-    private fun verifyRegister(value: Byte, register: Char) {
+    private fun verifyRegister(value: Int, register: Char) {
         val registerValue = registers.getValue(register)
+        assertEquals(value, registerValue, "Expected register $register to be $value but found $registerValue")
+    }
+
+    private fun verifyRegister(value: Int, register: String) {
+        val registerValue = registers.getShortValue(register)
         assertEquals(value, registerValue, "Expected register $register to be $value but found $registerValue")
     }
 }
