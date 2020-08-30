@@ -38,9 +38,15 @@ class Registers {
         get() {
             return (s and 0xFF).rotateLeft(8) or (p and 0xFF)
         }
-        set(value) {}
+        set(value) {
+            p = value and 0xFF
+            s = value.rotateRight(8) and 0xFF
+        }
 
-    private var stackPointer: Short = 0
+    fun decreaseStackPointer() {
+        sp--
+    }
+
     private var programCounter: Short = 0
     private var flagRegister: Byte = 0
 }

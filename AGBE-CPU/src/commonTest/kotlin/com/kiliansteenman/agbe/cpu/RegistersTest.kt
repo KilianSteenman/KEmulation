@@ -11,4 +11,11 @@ class RegistersTest {
     fun SP_init() {
         registers.assertRegister(0xFFFE, "SP")
     }
+
+    @Test
+    fun decrease_SP() {
+        registers.decreaseStackPointer()
+
+        registers.assertRegister(0xFFFD, "SP")
+    }
 }

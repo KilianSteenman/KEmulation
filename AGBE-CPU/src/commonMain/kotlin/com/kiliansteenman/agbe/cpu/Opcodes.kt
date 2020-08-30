@@ -92,5 +92,16 @@ val opcodes: Map<Byte, (r: Registers, arguments: ByteArray, memory: MemoryMap) -
         r.p = a[1].toInt()
     }
 
+    opcodeMap[0xF5.toByte()] = { r, a, m ->
+        m.push(r.a, r)
+        m.push(r.f, r)
+    }
+
     opcodeMap
+}
+
+@ExperimentalStdlibApi
+private fun MemoryMap.push(registerValue: Int, r: Registers) {
+    r.decreaseStackPointer()
+    writeByte(r.sp, registerValue)
 }

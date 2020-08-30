@@ -1,6 +1,7 @@
 package com.kiliansteenman.agbe.cpu
 
 import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 @ExperimentalStdlibApi
@@ -134,6 +135,20 @@ class OpcodesTest {
         performProgram(byteArrayOf(0x08, 0x01, 0x01))
 
         registers.assertRegister(257, "SP")
+    }
+
+    @Test
+    fun opcode_PUSH_nn() {
+        registers.a = 0x01
+        registers.f = 0x02
+
+        performProgram(byteArrayOf(0xF5.toByte()))
+
+        var stackValue = memoryMap.readByte(registers.sp)
+        assertEquals(0x02, stackValue)
+
+        stackValue = memoryMap.readByte(registers.sp + 1)
+        assertEquals(0x01, stackValue)
     }
 
     private fun performProgram(program: ByteArray) {
