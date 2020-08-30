@@ -18,4 +18,12 @@ class RegistersTest {
 
         registers.assertRegister(0xFFFD, "SP")
     }
+
+    @Test
+    fun increase_SP() {
+        registers.decreaseStackPointer()
+        registers.increaseStackPointer()
+
+        registers.assertRegister(0xFFFE, "SP")
+    }
 }

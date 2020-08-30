@@ -148,9 +148,9 @@ class OpcodesTest {
 
     @Test
     fun opcode_PUSH_nn() {
-        registers.reset()
-
         pushValues.forEach { pushValue ->
+            registers.reset()
+
             registers.setValue(pushValue.r1, 0x01)
             registers.setValue(pushValue.r2, 0x02)
 
@@ -161,6 +161,32 @@ class OpcodesTest {
 
             stackValue = memoryMap.readByte(registers.sp + 1)
             assertEquals(0x01, stackValue)
+        }
+    }
+
+    internal data class PopOpcode(val opcode: Byte, val r1: Char, val r2: Char)
+
+    private val popValues = arrayOf(
+        PopOpcode(0xF1.toByte(), 'A','F'),
+        PopOpcode(0xC1.toByte(), 'B','C'),
+        PopOpcode(0xD1.toByte(), 'D','E'),
+        PopOpcode(0xE1.toByte(), 'H','L')
+    )
+
+    @Test
+    fun opcode_POP_nn() {
+        popValues.forEach { popValue ->
+            registers.reset()
+
+            registers.decreaseStackPointer()
+            memoryMap.writeByte(registers.sp, 0x1)
+            registers.decreaseStackPointer()
+            memoryMap.writeByte(registers.sp, 0x2)
+
+            performProgram(byteArrayOf(popValue.opcode))
+
+            registers.assertRegister(0x2, popValue.r1)
+            registers.assertRegister(0x1, popValue.r2)
         }
     }
 

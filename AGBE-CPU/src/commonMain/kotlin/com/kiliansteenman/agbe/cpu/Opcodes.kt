@@ -112,6 +112,26 @@ val opcodes: Map<Byte, (r: Registers, arguments: ByteArray, memory: MemoryMap) -
         m.push(r.l, r)
     }
 
+    opcodeMap[0xF1.toByte()] = { r, a, m ->
+        r.a = m.pop(r)
+        r.f = m.pop(r)
+    }
+
+    opcodeMap[0xC1.toByte()] = { r, a, m ->
+        r.b = m.pop(r)
+        r.c = m.pop(r)
+    }
+
+    opcodeMap[0xD1.toByte()] = { r, a, m ->
+        r.d = m.pop(r)
+        r.e = m.pop(r)
+    }
+
+    opcodeMap[0xE1.toByte()] = { r, a, m ->
+        r.h = m.pop(r)
+        r.l = m.pop(r)
+    }
+
     opcodeMap
 }
 
@@ -119,4 +139,11 @@ val opcodes: Map<Byte, (r: Registers, arguments: ByteArray, memory: MemoryMap) -
 private fun MemoryMap.push(registerValue: Int, r: Registers) {
     r.decreaseStackPointer()
     writeByte(r.sp, registerValue)
+}
+
+@ExperimentalStdlibApi
+private fun MemoryMap.pop(r: Registers): Int {
+    return readByte(r.sp).toInt().also {
+        r.increaseStackPointer()
+    }
 }

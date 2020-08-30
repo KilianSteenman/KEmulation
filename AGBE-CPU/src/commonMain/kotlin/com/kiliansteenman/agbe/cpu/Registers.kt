@@ -47,6 +47,10 @@ class Registers {
         sp--
     }
 
+    fun increaseStackPointer() {
+        sp++
+    }
+
     private var programCounter: Short = 0
     private var flagRegister: Byte = 0
 }
