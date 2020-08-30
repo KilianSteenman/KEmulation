@@ -2,6 +2,7 @@ package com.kiliansteenman.agbe.cpu
 
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 @ExperimentalStdlibApi
 class OpcodesTest {
@@ -119,6 +120,19 @@ class OpcodesTest {
         registers.l = 0x01
 
         performProgram(byteArrayOf(0xF9.toByte()))
+
+        verifyRegister(257, "SP")
+    }
+
+    @Test
+    fun opcode_LD_HL_SP_n() {
+        // TODO: Implement opcode
+        assertTrue(false)
+    }
+
+    @Test
+    fun opcode_LD_nn_SP() {
+        performProgram(byteArrayOf(0x08, 0x01, 0x01))
 
         verifyRegister(257, "SP")
     }

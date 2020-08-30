@@ -83,5 +83,14 @@ val opcodes: Map<Byte, (r: Registers, arguments: ByteArray, memory: MemoryMap) -
         r.p = r.l
     }
 
+    opcodeMap[0xF8.toByte()] = { r, a, m ->
+        NotImplementedError("Opcode 0xF8 not implemented")
+    }
+
+    opcodeMap[0x08] = { r, a, m ->
+        r.s = a[0].toInt()
+        r.p = a[1].toInt()
+    }
+
     opcodeMap
 }
