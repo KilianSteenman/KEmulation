@@ -97,6 +97,21 @@ val opcodes: Map<Byte, (r: Registers, arguments: ByteArray, memory: MemoryMap) -
         m.push(r.f, r)
     }
 
+    opcodeMap[0xC5.toByte()] = { r, a, m ->
+        m.push(r.b, r)
+        m.push(r.c, r)
+    }
+
+    opcodeMap[0xD5.toByte()] = { r, a, m ->
+        m.push(r.d, r)
+        m.push(r.e, r)
+    }
+
+    opcodeMap[0xE5.toByte()] = { r, a, m ->
+        m.push(r.h, r)
+        m.push(r.l, r)
+    }
+
     opcodeMap
 }
 
