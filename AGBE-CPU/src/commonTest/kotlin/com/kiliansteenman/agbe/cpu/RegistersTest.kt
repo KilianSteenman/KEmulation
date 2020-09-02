@@ -1,6 +1,7 @@
 package com.kiliansteenman.agbe.cpu
 
 import kotlin.test.Test
+import kotlin.test.assertTrue
 
 @ExperimentalStdlibApi
 class RegistersTest {
@@ -25,5 +26,12 @@ class RegistersTest {
         registers.increaseStackPointer()
 
         registers.assertRegister(0xFFFE, "SP")
+    }
+
+    @Test
+    fun whenZeroFlagIsSet_ThanZeroFlagIsSet() {
+        registers.f = 0b10000000
+
+        assertTrue(registers.isZeroFlagSet())
     }
 }

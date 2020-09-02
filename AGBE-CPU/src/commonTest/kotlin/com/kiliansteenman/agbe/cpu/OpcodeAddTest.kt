@@ -1,6 +1,7 @@
 package com.kiliansteenman.agbe.cpu
 
 import kotlin.test.Test
+import kotlin.test.assertEquals
 
 @ExperimentalStdlibApi
 class OpcodeAddTest : OpcodeBaseTest() {
@@ -35,5 +36,14 @@ class OpcodeAddTest : OpcodeBaseTest() {
 
             registers.assertRegister(value.outputValue, value.r1)
         }
+    }
+
+    @Test
+    fun when_add_result_equals_zero_z_flag_is_set() {
+        val addProgram = byteArrayOf(0x87.toByte())
+
+        performProgram(addProgram)
+
+        registers.assertZeroFlag()
     }
 }

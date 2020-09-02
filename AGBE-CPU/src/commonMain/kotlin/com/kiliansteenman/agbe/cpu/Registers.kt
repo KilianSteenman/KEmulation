@@ -19,20 +19,24 @@ class Registers {
             return (b and 0xFF).rotateLeft(8) or (c and 0xFF)
         }
         set(value) {
-            throw NotImplementedError("Set not implemented for register BC")
+            throw NotImplementedError("Set not implemented for register BC $value")
         }
 
     var de: Int
         get() {
             return ((((d and 0xFF).rotateLeft(8)) or (e and 0xFF)))
         }
-        set(value) {}
+        set(value) {
+            throw NotImplementedError("Set not implemented for register DE $value")
+        }
 
     var hl: Int
         get() {
             return ((((h and 0xFF).rotateLeft(8)) or (l and 0xFF)))
         }
-        set(value) {}
+        set(value) {
+            throw NotImplementedError("Set not implemented for register HL $value")
+        }
 
     var sp: Int
         get() {
@@ -51,6 +55,7 @@ class Registers {
         sp++
     }
 
-    private var programCounter: Short = 0
-    private var flagRegister: Byte = 0
+    fun isZeroFlagSet(): Boolean {
+        return f and 0b10000000 == 0b10000000
+    }
 }

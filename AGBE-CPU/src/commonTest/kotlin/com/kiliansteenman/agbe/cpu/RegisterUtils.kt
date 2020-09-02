@@ -1,6 +1,7 @@
 package com.kiliansteenman.agbe.cpu
 
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 @ExperimentalStdlibApi
 fun Registers.assertRegister(value: Int, register: Char) {
@@ -65,4 +66,9 @@ fun Registers.reset() {
     f = 0
     h = 0
     l = 0
+}
+
+@ExperimentalStdlibApi
+fun Registers.assertZeroFlag() {
+    assertTrue(isZeroFlagSet(), "Zero flag is not set")
 }
