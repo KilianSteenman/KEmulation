@@ -140,12 +140,29 @@ val opcodes: Map<Byte, (r: Registers, arguments: ByteArray, memory: MemoryMap) -
     opcodeMap[0x84.toByte()] = { r, a, m -> addValue(r, r.h) }
     opcodeMap[0x85.toByte()] = { r, a, m -> addValue(r, r.l) }
 
+    opcodeMap[0x97.toByte()] = { r, a, m -> subtractValue(r, r.a) }
+    opcodeMap[0x90.toByte()] = { r, a, m -> subtractValue(r, r.b) }
+    opcodeMap[0x91.toByte()] = { r, a, m -> subtractValue(r, r.c) }
+    opcodeMap[0x92.toByte()] = { r, a, m -> subtractValue(r, r.d) }
+    opcodeMap[0x93.toByte()] = { r, a, m -> subtractValue(r, r.e) }
+    opcodeMap[0x94.toByte()] = { r, a, m -> subtractValue(r, r.h) }
+    opcodeMap[0x95.toByte()] = { r, a, m -> subtractValue(r, r.l) }
+
     opcodeMap
 }
 
 @ExperimentalStdlibApi
 private fun addValue(r: Registers, value: Int) {
     r.a += value
+
+    if(r.a == 0) {
+        r.f = r.f or 0b10000000
+    }
+}
+
+@ExperimentalStdlibApi
+private fun subtractValue(r: Registers, value: Int) {
+    r.a -= value
 
     if(r.a == 0) {
         r.f = r.f or 0b10000000
