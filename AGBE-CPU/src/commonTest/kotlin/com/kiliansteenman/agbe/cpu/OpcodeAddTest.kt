@@ -2,6 +2,7 @@ package com.kiliansteenman.agbe.cpu
 
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 @ExperimentalStdlibApi
 class OpcodeAddTest : OpcodeBaseTest() {
@@ -44,6 +45,6 @@ class OpcodeAddTest : OpcodeBaseTest() {
 
         performProgram(addProgram)
 
-        registers.assertZeroFlag()
+        assertTrue(registers.isZeroFlagSet())
     }
 }

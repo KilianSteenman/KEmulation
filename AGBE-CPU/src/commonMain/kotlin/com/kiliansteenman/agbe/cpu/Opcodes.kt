@@ -148,6 +148,14 @@ val opcodes: Map<Byte, (r: Registers, arguments: ByteArray, memory: MemoryMap) -
     opcodeMap[0x94.toByte()] = { r, a, m -> subtractValue(r, r.h) }
     opcodeMap[0x95.toByte()] = { r, a, m -> subtractValue(r, r.l) }
 
+    opcodeMap[0xA7.toByte()] = { r, a, m -> andValue(r, r.a) }
+    opcodeMap[0xA0.toByte()] = { r, a, m -> andValue(r, r.b) }
+    opcodeMap[0xA1.toByte()] = { r, a, m -> andValue(r, r.c) }
+    opcodeMap[0xA2.toByte()] = { r, a, m -> andValue(r, r.d) }
+    opcodeMap[0xA3.toByte()] = { r, a, m -> andValue(r, r.e) }
+    opcodeMap[0xA4.toByte()] = { r, a, m -> andValue(r, r.h) }
+    opcodeMap[0xA5.toByte()] = { r, a, m -> andValue(r, r.l) }
+
     opcodeMap
 }
 
@@ -167,6 +175,19 @@ private fun subtractValue(r: Registers, value: Int) {
     if(r.a == 0) {
         r.f = r.f or 0b10000000
     }
+}
+
+@ExperimentalStdlibApi
+private fun andValue(r: Registers, value: Int) {
+    r.a = r.a and value
+
+    if(r.a == 0) {
+        r.f = r.f or 0b10000000 // Set Z
+    }
+
+    r.f = r.f and 0b10111111 // Reset N
+    r.f = r.f or 0b00100000 // Set H
+    r.f = r.f and 0b11101111 // Reset H
 }
 
 @ExperimentalStdlibApi

@@ -58,4 +58,20 @@ class Registers {
     fun isZeroFlagSet(): Boolean {
         return f and 0b10000000 == 0b10000000
     }
+
+    fun isSubtractFlagSet(): Boolean {
+        return f and 0b01000000 == 0b01000000
+    }
+
+    fun isHalfCarryFlagSet(): Boolean {
+        return f and 0b00100000 == 0b00100000
+    }
+
+    fun isCarryFlagSet(): Boolean {
+        return f and 0b00010000 == 0b00010000
+    }
+
+    fun setSubtractFlag() {
+        f = f or 0b01000000
+    }
 }
