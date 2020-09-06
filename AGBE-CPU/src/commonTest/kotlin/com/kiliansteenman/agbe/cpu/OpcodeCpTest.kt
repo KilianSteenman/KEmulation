@@ -46,7 +46,7 @@ class OpcodeCpTest : OpcodeBaseTest() {
         }
     }
 
-    private val xorOpcodes = byteArrayOf(
+    private val opcodes = byteArrayOf(
         0xBF.toByte(),
         0xB8.toByte(),
         0xB9.toByte(),
@@ -58,7 +58,7 @@ class OpcodeCpTest : OpcodeBaseTest() {
 
     @Test
     fun when_CP_opcode_is_executed_flags_are_set() {
-        xorOpcodes.forEach { opcode ->
+        opcodes.forEach { opcode ->
             performProgram(byteArrayOf(opcode))
 
             assertTrue(registers.isSubtractFlagSet(), "Subtract flag should be reset")

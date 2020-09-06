@@ -172,6 +172,14 @@ val opcodes: Map<Byte, (r: Registers, arguments: ByteArray, memory: MemoryMap) -
     opcodeMap[0xBC.toByte()] = { r, a, m -> cpValue(r, r.h) }
     opcodeMap[0xBD.toByte()] = { r, a, m -> cpValue(r, r.l) }
 
+    opcodeMap[0x3C.toByte()] = { r, a, m -> r.a++ }
+    opcodeMap[0x04.toByte()] = { r, a, m -> r.b++ }
+    opcodeMap[0x0C.toByte()] = { r, a, m -> r.c++ }
+    opcodeMap[0x14.toByte()] = { r, a, m -> r.d++ }
+    opcodeMap[0x1C.toByte()] = { r, a, m -> r.e++ }
+    opcodeMap[0x24.toByte()] = { r, a, m -> r.h++ }
+    opcodeMap[0x2C.toByte()] = { r, a, m -> r.l++ }
+
     opcodeMap
 }
 
@@ -179,7 +187,7 @@ val opcodes: Map<Byte, (r: Registers, arguments: ByteArray, memory: MemoryMap) -
 private fun addValue(r: Registers, value: Int) {
     r.a += value
 
-    if(r.a == 0) {
+    if (r.a == 0) {
         r.f = r.f or 0b10000000
     }
 }
@@ -188,7 +196,7 @@ private fun addValue(r: Registers, value: Int) {
 private fun subtractValue(r: Registers, value: Int) {
     r.a -= value
 
-    if(r.a == 0) {
+    if (r.a == 0) {
         r.f = r.f or 0b10000000
     }
 }
@@ -197,7 +205,7 @@ private fun subtractValue(r: Registers, value: Int) {
 private fun andValue(r: Registers, value: Int) {
     r.a = r.a and value
 
-    if(r.a == 0) {
+    if (r.a == 0) {
         r.f = r.f or 0b10000000 // Set Z
     }
 
@@ -210,7 +218,7 @@ private fun andValue(r: Registers, value: Int) {
 private fun xorValue(r: Registers, value: Int) {
     r.a = r.a xor value
 
-    if(r.a == 0) {
+    if (r.a == 0) {
         r.f = r.f or 0b10000000 // Set Z
     }
 
@@ -221,7 +229,7 @@ private fun xorValue(r: Registers, value: Int) {
 private fun cpValue(r: Registers, value: Int) {
     val result = r.a - value
 
-    if(result == 0) {
+    if (result == 0) {
         r.f = r.f or 0b10000000 // Set Z
     }
 
