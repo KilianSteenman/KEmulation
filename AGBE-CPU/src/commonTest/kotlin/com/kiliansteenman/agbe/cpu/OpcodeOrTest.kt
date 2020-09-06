@@ -5,7 +5,7 @@ import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 @ExperimentalStdlibApi
-class OpcodeAndTest : OpcodeBaseTest() {
+class OpcodeOrTest : OpcodeBaseTest() {
 
     private val values = arrayOf(
         MathOperation(0xA7.toByte(), 'A', 'A', 0b11110000, 0b11110000, 0b11110000),

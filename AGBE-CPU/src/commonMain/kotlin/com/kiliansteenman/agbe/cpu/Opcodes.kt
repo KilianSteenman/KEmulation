@@ -156,6 +156,14 @@ val opcodes: Map<Byte, (r: Registers, arguments: ByteArray, memory: MemoryMap) -
     opcodeMap[0xA4.toByte()] = { r, a, m -> andValue(r, r.h) }
     opcodeMap[0xA5.toByte()] = { r, a, m -> andValue(r, r.l) }
 
+    opcodeMap[0xAF.toByte()] = { r, a, m -> xorValue(r, r.a) }
+    opcodeMap[0xA8.toByte()] = { r, a, m -> xorValue(r, r.b) }
+    opcodeMap[0xA9.toByte()] = { r, a, m -> xorValue(r, r.c) }
+    opcodeMap[0xAA.toByte()] = { r, a, m -> xorValue(r, r.d) }
+    opcodeMap[0xAB.toByte()] = { r, a, m -> xorValue(r, r.e) }
+    opcodeMap[0xAC.toByte()] = { r, a, m -> xorValue(r, r.h) }
+    opcodeMap[0xAD.toByte()] = { r, a, m -> xorValue(r, r.l) }
+
     opcodeMap
 }
 
@@ -187,7 +195,18 @@ private fun andValue(r: Registers, value: Int) {
 
     r.f = r.f and 0b10111111 // Reset N
     r.f = r.f or 0b00100000 // Set H
-    r.f = r.f and 0b11101111 // Reset H
+    r.f = r.f and 0b11101111 // Reset C
+}
+
+@ExperimentalStdlibApi
+private fun xorValue(r: Registers, value: Int) {
+    r.a = r.a xor value
+
+    if(r.a == 0) {
+        r.f = r.f or 0b10000000 // Set Z
+    }
+
+    r.f = r.f and 0b10001111 // Reset NHC
 }
 
 @ExperimentalStdlibApi

@@ -7,23 +7,14 @@ import kotlin.test.assertTrue
 @ExperimentalStdlibApi
 class OpcodeSubTest : OpcodeBaseTest() {
 
-    internal data class SubtractOpcode(
-        val opcode: Byte,
-        val r1: Char,
-        val r2: Char,
-        val r1Value: Int,
-        val r2Value: Int,
-        val outputValue: Int
-    )
-
     private val values = arrayOf(
-        SubtractOpcode(0x97.toByte(), 'A', 'A', 0x1, 0x1, 0x0),
-        SubtractOpcode(0x90.toByte(), 'A', 'B', 0x2, 0x1, 0x1),
-        SubtractOpcode(0x91.toByte(), 'A', 'C', 0x2, 0x1, 0x1),
-        SubtractOpcode(0x92.toByte(), 'A', 'D', 0x2, 0x1, 0x1),
-        SubtractOpcode(0x93.toByte(), 'A', 'E', 0x2, 0x1, 0x1),
-        SubtractOpcode(0x94.toByte(), 'A', 'H', 0x2, 0x1, 0x1),
-        SubtractOpcode(0x95.toByte(), 'A', 'L', 0x2, 0x1, 0x1),
+        MathOperation(0x97.toByte(), 'A', 'A', 0x1, 0x1, 0x0),
+        MathOperation(0x90.toByte(), 'A', 'B', 0x2, 0x1, 0x1),
+        MathOperation(0x91.toByte(), 'A', 'C', 0x2, 0x1, 0x1),
+        MathOperation(0x92.toByte(), 'A', 'D', 0x2, 0x1, 0x1),
+        MathOperation(0x93.toByte(), 'A', 'E', 0x2, 0x1, 0x1),
+        MathOperation(0x94.toByte(), 'A', 'H', 0x2, 0x1, 0x1),
+        MathOperation(0x95.toByte(), 'A', 'L', 0x2, 0x1, 0x1),
     )
 
     @Test
