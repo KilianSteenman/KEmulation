@@ -42,6 +42,10 @@ fun Registers.setValue(register: String, value: Int) {
         "F" -> f = value
         "H" -> h = value
         "L" -> l = value
+        "HL" -> hl = value
+        "BC" -> bc = value
+        "DE" -> de = value
+        "SP" -> sp = value
         else -> throw IllegalArgumentException("Unknown register $register")
     }
 }

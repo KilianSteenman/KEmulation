@@ -19,23 +19,26 @@ class Registers {
             return (b and 0xFF).rotateLeft(8) or (c and 0xFF)
         }
         set(value) {
-            throw NotImplementedError("Set not implemented for register BC $value")
+            b = value.rotateRight(8)
+            c = value and 0xFF
         }
 
     var de: Int
         get() {
-            return ((((d and 0xFF).rotateLeft(8)) or (e and 0xFF)))
+            return (d and 0xFF).rotateLeft(8) or (e and 0xFF)
         }
         set(value) {
-            throw NotImplementedError("Set not implemented for register DE $value")
+            d = value.rotateRight(8)
+            e = value and 0xFF
         }
 
     var hl: Int
         get() {
-            return ((((h and 0xFF).rotateLeft(8)) or (l and 0xFF)))
+            return h.rotateLeft(8) or l
         }
         set(value) {
-            throw NotImplementedError("Set not implemented for register HL $value")
+            h = value.rotateRight(8)
+            l = value and 0xFF
         }
 
     var sp: Int
@@ -43,8 +46,8 @@ class Registers {
             return (s and 0xFF).rotateLeft(8) or (p and 0xFF)
         }
         set(value) {
+            s = value.rotateRight(8)
             p = value and 0xFF
-            s = value.rotateRight(8) and 0xFF
         }
 
     fun decreaseStackPointer() {

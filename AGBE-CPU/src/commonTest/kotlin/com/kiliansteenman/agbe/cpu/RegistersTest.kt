@@ -1,6 +1,7 @@
 package com.kiliansteenman.agbe.cpu
 
 import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 @ExperimentalStdlibApi
@@ -26,6 +27,13 @@ class RegistersTest {
         registers.increaseStackPointer()
 
         registers.assertRegister(0xFFFE, "SP")
+    }
+
+    @Test
+    fun test_16_bit_registers() {
+        registers.setValue("BC", 400)
+
+        assertEquals(400, registers.bc)
     }
 
     @Test
