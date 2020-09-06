@@ -43,6 +43,8 @@ class OpcodeXorTest : OpcodeBaseTest() {
     @Test
     fun when_XOR_opcode_is_executed_flags_are_set() {
         xorOpcodes.forEach { opcode ->
+            registers.reset()
+
             performProgram(byteArrayOf(opcode))
 
             assertFalse(registers.isSubtractFlagSet(), "Subtract flag should be reset")

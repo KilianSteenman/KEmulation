@@ -164,6 +164,14 @@ val opcodes: Map<Byte, (r: Registers, arguments: ByteArray, memory: MemoryMap) -
     opcodeMap[0xAC.toByte()] = { r, a, m -> xorValue(r, r.h) }
     opcodeMap[0xAD.toByte()] = { r, a, m -> xorValue(r, r.l) }
 
+    opcodeMap[0xBF.toByte()] = { r, a, m -> cpValue(r, r.a) }
+    opcodeMap[0xB8.toByte()] = { r, a, m -> cpValue(r, r.b) }
+    opcodeMap[0xB9.toByte()] = { r, a, m -> cpValue(r, r.c) }
+    opcodeMap[0xBA.toByte()] = { r, a, m -> cpValue(r, r.d) }
+    opcodeMap[0xBB.toByte()] = { r, a, m -> cpValue(r, r.e) }
+    opcodeMap[0xBC.toByte()] = { r, a, m -> cpValue(r, r.h) }
+    opcodeMap[0xBD.toByte()] = { r, a, m -> cpValue(r, r.l) }
+
     opcodeMap
 }
 
@@ -207,6 +215,17 @@ private fun xorValue(r: Registers, value: Int) {
     }
 
     r.f = r.f and 0b10001111 // Reset NHC
+}
+
+@ExperimentalStdlibApi
+private fun cpValue(r: Registers, value: Int) {
+    val result = r.a - value
+
+    if(result == 0) {
+        r.f = r.f or 0b10000000 // Set Z
+    }
+
+    r.f = r.f or 0b01000000 // Reset NHC
 }
 
 @ExperimentalStdlibApi
