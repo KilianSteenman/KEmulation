@@ -24,7 +24,7 @@ class OpcodeAndTest : OpcodeBaseTest() {
             registers.setValue(value.r1, value.r1Value)
             registers.setValue(value.r2, value.r2Value)
 
-            performProgram(byteArrayOf(value.opcode))
+            performOpcode(byteArrayOf(value.opcode))
 
             registers.assertRegister(value.outputValue, value.r1)
         }
@@ -34,7 +34,7 @@ class OpcodeAndTest : OpcodeBaseTest() {
     fun when_and_result_equals_zero_z_flag_is_set() {
         registers.a = 0
 
-        performProgram(byteArrayOf(0xA7.toByte()))
+        performOpcode(byteArrayOf(0xA7.toByte()))
 
         assertTrue(registers.isZeroFlagSet())
     }
@@ -43,21 +43,21 @@ class OpcodeAndTest : OpcodeBaseTest() {
     fun when_and_is_performed_than_N_flag_is_reset() {
         registers.setSubtractFlag()
 
-        performProgram(byteArrayOf(0xA7.toByte()))
+        performOpcode(byteArrayOf(0xA7.toByte()))
 
         assertFalse(registers.isSubtractFlagSet())
     }
 
     @Test
     fun when_and_is_performed_than_H_flag_is_set() {
-        performProgram(byteArrayOf(0xA7.toByte()))
+        performOpcode(byteArrayOf(0xA7.toByte()))
 
         assertTrue(registers.isHalfCarryFlagSet())
     }
 
     @Test
     fun when_and_is_performed_than_C_flag_is_reset() {
-        performProgram(byteArrayOf(0xA7.toByte()))
+        performOpcode(byteArrayOf(0xA7.toByte()))
 
         assertFalse(registers.isCarryFlagSet())
     }

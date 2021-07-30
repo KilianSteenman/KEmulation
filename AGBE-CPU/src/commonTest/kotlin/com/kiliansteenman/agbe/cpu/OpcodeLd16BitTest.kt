@@ -19,7 +19,7 @@ class OpcodeLd16BitTest: OpcodeBaseTest() {
         ld16BitValue.forEach {
             registers.reset()
 
-            performProgram(byteArrayOf(it.opcode, 0x0, 0x0.toByte()))
+            performOpcode(byteArrayOf(it.opcode, 0x0, 0x0.toByte()))
 
             registers.assertRegister(0, it.register)
         }

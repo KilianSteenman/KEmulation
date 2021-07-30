@@ -24,7 +24,7 @@ class OpcodePopTest: OpcodeBaseTest() {
             registers.decreaseStackPointer()
             memoryMap.writeByte(registers.sp, 0x2)
 
-            performProgram(byteArrayOf(popValue.opcode))
+            performOpcode(byteArrayOf(popValue.opcode))
 
             registers.assertRegister(0x2, popValue.r1)
             registers.assertRegister(0x1, popValue.r2)

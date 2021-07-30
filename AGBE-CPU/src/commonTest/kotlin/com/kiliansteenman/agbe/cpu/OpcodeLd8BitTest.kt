@@ -21,7 +21,7 @@ class OpcodeLd8BitTest: OpcodeBaseTest() {
         ld8BitValue.forEach {
             registers.reset()
 
-            performProgram(byteArrayOf(it.opcode, 2))
+            performOpcode(byteArrayOf(it.opcode, 2))
 
             registers.assertRegister(2, it.register)
         }

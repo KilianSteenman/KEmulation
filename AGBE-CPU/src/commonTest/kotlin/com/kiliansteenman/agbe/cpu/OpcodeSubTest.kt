@@ -1,7 +1,6 @@
 package com.kiliansteenman.agbe.cpu
 
 import kotlin.test.Test
-import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 @ExperimentalStdlibApi
@@ -24,7 +23,7 @@ class OpcodeSubTest : OpcodeBaseTest() {
             registers.setValue(value.r1, value.r1Value)
             registers.setValue(value.r2, value.r2Value)
 
-            performProgram(byteArrayOf(value.opcode))
+            performOpcode(byteArrayOf(value.opcode))
 
             registers.assertRegister(value.outputValue, value.r1)
         }
@@ -36,7 +35,7 @@ class OpcodeSubTest : OpcodeBaseTest() {
 
         val addProgram = byteArrayOf(0x97.toByte())
 
-        performProgram(addProgram)
+        performOpcode(addProgram)
 
         assertTrue(registers.isZeroFlagSet())
     }

@@ -1,8 +1,6 @@
 package com.kiliansteenman.agbe.cpu
 
 import kotlin.test.Test
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
 
 @ExperimentalStdlibApi
 class OpcodeInc16BitTest : OpcodeBaseTest() {
@@ -21,7 +19,7 @@ class OpcodeInc16BitTest : OpcodeBaseTest() {
 
             registers.setValue(register, 0)
 
-            performProgram(byteArrayOf(opcode))
+            performOpcode(byteArrayOf(opcode))
 
             registers.assertRegister(1, register)
         }

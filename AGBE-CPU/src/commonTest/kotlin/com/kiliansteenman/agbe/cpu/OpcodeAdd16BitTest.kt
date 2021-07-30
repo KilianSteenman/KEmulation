@@ -20,7 +20,7 @@ class OpcodeAdd16BitTest : OpcodeBaseTest() {
             registers.hl = 300
             registers.setValue(register, 300)
 
-            performProgram(byteArrayOf(opcode))
+            performOpcode(byteArrayOf(opcode))
 
             registers.assertRegister(600, "HL")
         }

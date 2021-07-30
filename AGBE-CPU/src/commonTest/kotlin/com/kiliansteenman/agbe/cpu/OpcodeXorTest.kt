@@ -24,7 +24,7 @@ class OpcodeXorTest : OpcodeBaseTest() {
             registers.setValue(value.r1, value.r1Value)
             registers.setValue(value.r2, value.r2Value)
 
-            performProgram(byteArrayOf(value.opcode))
+            performOpcode(byteArrayOf(value.opcode))
 
             registers.assertRegister(value.outputValue, value.r1)
         }
@@ -45,7 +45,7 @@ class OpcodeXorTest : OpcodeBaseTest() {
         xorOpcodes.forEach { opcode ->
             registers.reset()
 
-            performProgram(byteArrayOf(opcode))
+            performOpcode(byteArrayOf(opcode))
 
             assertFalse(registers.isSubtractFlagSet(), "Subtract flag should be reset")
             assertFalse(registers.isHalfCarryFlagSet(), "HalfCarry flag should be reset")
@@ -57,7 +57,7 @@ class OpcodeXorTest : OpcodeBaseTest() {
     fun when_XOR_result_equals_zero_z_flag_is_set() {
         registers.a = 0
 
-        performProgram(byteArrayOf(0xAF.toByte()))
+        performOpcode(byteArrayOf(0xAF.toByte()))
 
         assertTrue(registers.isZeroFlagSet())
     }

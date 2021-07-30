@@ -7,6 +7,10 @@ class Cpu(
 ) {
 
     fun run(program: ByteArray) {
+
+    }
+
+    fun executeOpcode(program: ByteArray) {
         val operation = opcodes[program[0]]
 
         val arguments = if(program.size > 1) {

@@ -25,7 +25,7 @@ class OpcodeCpTest : OpcodeBaseTest() {
             registers.setValue(value.r1, 1)
             registers.setValue(value.r2, 1)
 
-            performProgram(byteArrayOf(value.opcode))
+            performOpcode(byteArrayOf(value.opcode))
 
             assertTrue(registers.isZeroFlagSet(), "Expected zero flag to be set")
         }
@@ -40,7 +40,7 @@ class OpcodeCpTest : OpcodeBaseTest() {
             registers.setValue(value.r1, 1)
             registers.setValue(value.r2, 2)
 
-            performProgram(byteArrayOf(value.opcode))
+            performOpcode(byteArrayOf(value.opcode))
 
             assertFalse(registers.isZeroFlagSet(), "Expected zero flag to be reset")
         }
@@ -59,7 +59,7 @@ class OpcodeCpTest : OpcodeBaseTest() {
     @Test
     fun when_CP_opcode_is_executed_flags_are_set() {
         opcodes.forEach { opcode ->
-            performProgram(byteArrayOf(opcode))
+            performOpcode(byteArrayOf(opcode))
 
             assertTrue(registers.isSubtractFlagSet(), "Subtract flag should be reset")
             assertFalse(registers.isHalfCarryFlagSet(), "HalfCarry flag should be reset")

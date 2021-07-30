@@ -60,7 +60,7 @@ class OpcodeLdR1R2Test: OpcodeBaseTest() {
 
             registers.setValue(it.r2, 1)
 
-            performProgram(byteArrayOf(it.opcode))
+            performOpcode(byteArrayOf(it.opcode))
 
             registers.assertRegister(1, it.r1)
         }

@@ -7,7 +7,7 @@ open class OpcodeBaseTest {
     protected val memoryMap = MemoryMap()
     private val cpu = Cpu(registers, memoryMap)
 
-    protected fun performProgram(program: ByteArray) {
-        cpu.run(program)
+    protected fun performOpcode(program: ByteArray) {
+        cpu.executeOpcode(program)
     }
 }

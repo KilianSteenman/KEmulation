@@ -23,7 +23,7 @@ class OpcodePushTest: OpcodeBaseTest() {
             registers.setValue(pushValue.r1, 0x01)
             registers.setValue(pushValue.r2, 0x02)
 
-            performProgram(byteArrayOf(pushValue.opcode))
+            performOpcode(byteArrayOf(pushValue.opcode))
 
             var stackValue = memoryMap.readByte(registers.sp)
             assertEquals(0x02, stackValue)

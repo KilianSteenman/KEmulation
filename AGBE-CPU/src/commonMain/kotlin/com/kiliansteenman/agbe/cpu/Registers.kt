@@ -14,6 +14,8 @@ class Registers {
     var s: Int = 0xFF
     var p: Int = 0xFE
 
+    var pc: Int = 0
+
     var bc: Int
         get() {
             return (b and 0xFF).rotateLeft(8) or (c and 0xFF)

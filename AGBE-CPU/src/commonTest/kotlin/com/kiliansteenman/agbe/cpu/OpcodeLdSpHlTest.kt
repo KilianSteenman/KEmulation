@@ -10,7 +10,7 @@ class OpcodeLdSpHlTest: OpcodeBaseTest() {
         registers.h = 0x01
         registers.l = 0x01
 
-        performProgram(byteArrayOf(0xF9.toByte()))
+        performOpcode(byteArrayOf(0xF9.toByte()))
 
         registers.assertRegister(257, "SP")
     }
