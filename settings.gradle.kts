@@ -1,3 +1,6 @@
-rootProject.name = "AGBE"
+rootProject.name = "KEmulation"
 
-include("AGBE-CPU")
+include(
+    "AGBE-CPU",
+    "CHIP-8"
+)

@@ -1,7 +1,7 @@
 plugins {
     kotlin("multiplatform") version "1.6.20"
 }
-group = "com.kiliansteenman.agbe"
+group = "com.kiliansteenman.kemulation.chip8"
 version = "0.0.1"
 
 repositories {
