@@ -1,6 +1,7 @@
 plugins {
-    kotlin("multiplatform") version "1.6.20"
+    kotlin("multiplatform")
 }
+
 group = "com.kiliansteenman.agbe"
 version = "0.0.1"
 

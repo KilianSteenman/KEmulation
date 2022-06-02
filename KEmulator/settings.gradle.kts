@@ -1,5 +1,4 @@
-rootProject.name = "KEmulator"
-
+// Copyright 2000-2022 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
 pluginManagement {
     repositories {
         google()
@@ -17,10 +16,4 @@ pluginManagement {
     }
 }
 
-include(
-    "AGBE-CPU",
-    "CHIP-8",
-    "android",
-    "common",
-    "desktop"
-)
+rootProject.name = "KEmulator"

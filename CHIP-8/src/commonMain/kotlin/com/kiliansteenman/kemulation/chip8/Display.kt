@@ -33,6 +33,8 @@ class Display(
             pixelIndex++
             pixels[pixelIndex] = pixels[pixelIndex].xor(spriteByte.and(0x01.toByte()) == 0x01.toByte())
             pixelIndex++
+
+            pixelIndex += 56
         }
     }
 }
