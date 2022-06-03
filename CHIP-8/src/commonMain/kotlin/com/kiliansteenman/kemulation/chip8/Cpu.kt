@@ -21,17 +21,17 @@ class Cpu(
         font.copyInto(state.memory, FONT_OFFSET)
     }
 
-    fun executeProgram(program: ByteArray) {
+    fun loadProgram(program: ByteArray) {
         // TODO: Write tests for this
         program.copyInto(state.memory, PROGRAM_OFFSET)
         state.programCounter = PROGRAM_OFFSET.toShort()
+    }
 
-        while (true) {
-            val opcode = getOpcode()
-            state.programCounter++
-            state.programCounter++
-            executeOpcode(opcode)
-        }
+    fun executeProgram() {
+        val opcode = getOpcode()
+        state.programCounter++
+        state.programCounter++
+        executeOpcode(opcode)
     }
 
     private fun getOpcode(): Short {
@@ -57,10 +57,10 @@ class Cpu(
                 state.index = opcode.and(0x0FFF)
             }
             opcode.and(0xD000.toShort()) == 0xD000.toShort() -> {
-                val x = state.registers[opcode.and(0x0F00).toInt()]
-                val y = state.registers[opcode.and(0x00F0).toInt()]
+                val x = state.registers[opcode.and(0x0F00).toInt().shr(16)]
+                val y = state.registers[opcode.and(0x00F0).toInt().shr(8)]
                 val rows = opcode.and(0x000F).toInt()
-                val sprite = state.memory.copyOfRange(state.index.toInt(), rows)
+                val sprite = state.memory.copyOfRange(state.index.toInt(), state.index.toInt() + rows)
                 display.drawSprite(x, y, sprite)
             }
             else -> TODO("Not yet implemented")
