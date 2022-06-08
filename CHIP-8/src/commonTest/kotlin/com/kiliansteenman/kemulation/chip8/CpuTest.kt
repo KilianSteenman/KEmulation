@@ -23,11 +23,11 @@ internal class CpuTest {
     fun whenClearScreenOpcodeIsCalled_thenScreenIsCleared() {
         val cpu = Cpu(display = display)
 
-        display.pixels[0][0] = true
+        display.pixels[0] = true
 
         cpu.executeOpcode(0x00E0)
 
-        assertFalse { display.pixels[0][0] }
+        assertFalse { display.pixels[0] }
     }
 
     @Test
@@ -71,16 +71,5 @@ internal class CpuTest {
 
         cpu.executeOpcode(0xA123.toShort())
         assertEquals(0x0123, state.index)
-    }
-
-    @Test
-    fun whenDisplayOpcodeIsCalled_thenSpriteIsWrittenToTheDisplay() {
-        val state = CpuState()
-        val cpu = Cpu(state, display)
-
-        cpu.executeOpcode(0xD123.toShort())
-
-        // TODO: Implement test
-        assertTrue { false }
     }
 }
