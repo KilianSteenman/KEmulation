@@ -59,6 +59,10 @@ class Cpu(
             opcode.and(0xF000.toShort()) == 0xA000.toShort() -> {
                 state.index = opcode.and(0x0FFF)
             }
+            opcode.and(0xF0FF.toShort()) == 0xF015.toShort() -> {
+                val register = opcode.and(0x0F00).toInt().shr(8)
+                state.delayTimer = state.registers[register]
+            }
             opcode.and(0xF000.toShort()) == 0xD000.toShort() -> {
                 val registerX = opcode.and(0x0F00).toInt().shr(8)
                 val registerY = opcode.and(0x00F0).toInt().shr(4)

@@ -72,4 +72,15 @@ internal class CpuTest {
         cpu.executeOpcode(0xA123.toShort())
         assertEquals(0x0123, state.index)
     }
+
+    @Test
+    fun whenSetDelayTimerIsCalled_thenDelayTimerIsSet() {
+        val state = CpuState()
+        val cpu = Cpu(state, display)
+
+        state.registers[2] = 37
+        cpu.executeOpcode(0xF215.toShort())
+
+        assertEquals(37, state.delayTimer)
+    }
 }
