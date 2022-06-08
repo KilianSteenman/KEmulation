@@ -35,8 +35,9 @@ class Cpu(
     }
 
     private fun getOpcode(): Short {
-        return state.memory[state.programCounter.toInt()].toInt().shl(8)
-            .or(state.memory[state.programCounter.toInt() + 1].toInt()).toShort()
+        val pc = state.programCounter.toInt()
+        return state.memory[pc].toUInt().shl(8)
+            .or(state.memory[pc + 1].toUByte().toUInt()).toShort()
     }
 
     fun executeOpcode(opcode: Short) {
@@ -68,7 +69,7 @@ class Cpu(
                 val sprite = state.memory.copyOfRange(state.index.toInt(), state.index.toInt() + rows)
                 display.drawSprite(x, y, sprite)
             }
-            else -> {}//TODO("Not yet implemented ${opcode.toUInt().toString(16)}")
+            else -> TODO("Not yet implemented ${opcode.toUShort().toString(16)}")
         }
     }
 
