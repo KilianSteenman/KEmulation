@@ -3,13 +3,25 @@ package com.kiliansteenman.kemulation.chip8
 import kotlin.experimental.and
 
 class CpuState {
-    var programCounter: Short = 0
+    private var _programCounter: Short = 0
+    val programCounter: Short
+        get() = _programCounter
+
     var index: Short = 0
     var stack = ArrayDeque<Short>()
     var delayTimer: Byte = 60
     var soundTimer: Byte = 0
     var registers = ByteArray(16) { 0 }
     var memory = ByteArray(4096)
+
+    fun increaseProgramCounter() {
+        _programCounter++
+        _programCounter++
+    }
+
+    fun setProgramCounter(pc: Short) {
+        _programCounter = pc
+    }
 }
 
 class Cpu(
@@ -24,13 +36,12 @@ class Cpu(
     fun loadProgram(program: ByteArray) {
         // TODO: Write tests for this
         program.copyInto(state.memory, PROGRAM_OFFSET)
-        state.programCounter = PROGRAM_OFFSET.toShort()
+        state.setProgramCounter(PROGRAM_OFFSET.toShort())
     }
 
     fun executeProgram() {
         val opcode = getOpcode()
-        state.programCounter++
-        state.programCounter++
+        state.increaseProgramCounter()
         executeOpcode(opcode)
     }
 
@@ -44,7 +55,14 @@ class Cpu(
         when {
             opcode == 0x00E0.toShort() -> display.clear()
             opcode.and(0xF000.toShort()) == 0x1000.toShort() -> {
-                state.programCounter = opcode.and(0x0FFF)
+                state.setProgramCounter(opcode.and(0x0FFF))
+            }
+            opcode.and(0xF000.toShort()) == 0x3000.toShort() -> {
+                val register = opcode.and(0x0F00).toInt().shr(8)
+                val value = opcode.and(0x00FF).toByte()
+                if (state.registers[register] == value) {
+                    state.increaseProgramCounter()
+                }
             }
             opcode.and(0xF000.toShort()) == 0x6000.toShort() -> {
                 val register = opcode.and(0x0F00).toInt().shr(8)

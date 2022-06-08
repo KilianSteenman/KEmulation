@@ -83,4 +83,26 @@ internal class CpuTest {
 
         assertEquals(37, state.delayTimer)
     }
+
+    @Test
+    fun whenSkipWhenTrueIsCalled_andValueIsEqual_thenNextInstructionIsSkipped() {
+        val state = CpuState()
+        val cpu = Cpu(state, display)
+
+        state.registers[2] = 0x37
+        cpu.executeOpcode(0x3237.toShort())
+
+        assertEquals(2.toShort(), state.programCounter)
+    }
+
+    @Test
+    fun whenSkipWhenTrueIsCalled_andValueIsNotEqual_thenNextInstructionIsNotSkipped() {
+        val state = CpuState()
+        val cpu = Cpu(state, display)
+
+        state.registers[2] = 0x36
+        cpu.executeOpcode(0x3237.toShort())
+
+        assertEquals(0.toShort(), state.programCounter)
+    }
 }
