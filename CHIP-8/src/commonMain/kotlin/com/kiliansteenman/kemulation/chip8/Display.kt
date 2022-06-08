@@ -7,40 +7,46 @@ class Display(
     private val height: Int
 ) {
 
-    val pixels = BooleanArray(width * height)
+    val pixels = BooleanArray(width * height) { false }
 
     fun clear() {
         pixels.forEachIndexed { index, _ -> pixels[index] = false }
     }
 
-    fun drawSprite(x: Byte, y: Byte, sprite: ByteArray) {
-        var pixelIndex = (x * width) + (y * height)
+    fun drawSprite(xOffset: Byte, yOffset: Byte, sprite: ByteArray) {
+        var x = xOffset.toInt() % width
+        var y = yOffset.toInt() % height
+
+        println("Drawing at $x ($xOffset) $y ($yOffset) : ${sprite.map { it.toString(2) }}")
+
         sprite.forEach { spriteByte ->
-            writePixel(pixelIndex, spriteByte.and(0x80.toByte()) == 0x80.toByte())
-            pixelIndex++
-            writePixel(pixelIndex, spriteByte.and(0x40.toByte()) == 0x40.toByte())
-            pixelIndex++
-            writePixel(pixelIndex, spriteByte.and(0x20.toByte()) == 0x20.toByte())
-            pixelIndex++
-            writePixel(pixelIndex, spriteByte.and(0x10.toByte()) == 0x10.toByte())
-            pixelIndex++
+            writePixel(x, y, spriteByte.and(0x80.toByte()) == 0x80.toByte())
+            x++
+            writePixel(x, y, spriteByte.and(0x40.toByte()) == 0x40.toByte())
+            x++
+            writePixel(x, y, spriteByte.and(0x20.toByte()) == 0x20.toByte())
+            x++
+            writePixel(x, y, spriteByte.and(0x10.toByte()) == 0x10.toByte())
+            x++
 
-            writePixel(pixelIndex, spriteByte.and(0x08.toByte()) == 0x08.toByte())
-            pixelIndex++
-            writePixel(pixelIndex, spriteByte.and(0x04.toByte()) == 0x04.toByte())
-            pixelIndex++
-            writePixel(pixelIndex, spriteByte.and(0x02.toByte()) == 0x02.toByte())
-            pixelIndex++
-            writePixel(pixelIndex, spriteByte.and(0x01.toByte()) == 0x01.toByte())
-            pixelIndex++
+            writePixel(x, y, spriteByte.and(0x08.toByte()) == 0x08.toByte())
+            x++
+            writePixel(x, y, spriteByte.and(0x04.toByte()) == 0x04.toByte())
+            x++
+            writePixel(x, y, spriteByte.and(0x02.toByte()) == 0x02.toByte())
+            x++
+            writePixel(x, y, spriteByte.and(0x01.toByte()) == 0x01.toByte())
+            x++
 
-            pixelIndex += 56
+            y++
+            x = xOffset.toInt() % width
         }
     }
 
-    private fun writePixel(pixelIndex: Int, enabled: Boolean) {
-        if(pixelIndex >= pixels.size) return
+    private fun writePixel(x: Int, y: Int, enabled: Boolean) {
+        if (x >= width || y >= height) return
 
-        pixels[pixelIndex] = pixels[pixelIndex].xor(enabled)
+        val pixel = (y * width) + x
+        pixels[pixel] = pixels[pixel].xor(enabled)
     }
 }

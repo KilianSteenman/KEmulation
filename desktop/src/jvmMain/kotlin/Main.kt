@@ -47,12 +47,12 @@ val Display.enabledPixels: List<Offset>
         .map { it.first }
         .toList()
 
-fun loadRom(path: String): ByteArray {
-    return File(path).readBytes()
-}
-
 fun Int.toOffset(): Offset {
     val x = (this / 64) * 10 + 10
     val y = this % 64 * 10 + 10
-    return Offset(x.toFloat(), y.toFloat())
+    return Offset(y.toFloat(), x.toFloat())
+}
+
+fun loadRom(path: String): ByteArray {
+    return File(path).readBytes()
 }

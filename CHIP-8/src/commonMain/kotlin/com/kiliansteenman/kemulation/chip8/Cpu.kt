@@ -46,24 +46,29 @@ class Cpu(
                 state.programCounter = opcode.and(0x0FFF)
             }
             opcode.and(0xF000.toShort()) == 0x6000.toShort() -> {
-                state.registers[opcode.and(0x0F00.toShort()).toInt().shr(8)] = opcode.and(0x00FF.toShort()).toByte()
+                val register = opcode.and(0x0F00).toInt().shr(8)
+                val value = opcode.and(0x00FF).toByte()
+                state.registers[register] = value
             }
             opcode.and(0xF000.toShort()) == 0x7000.toShort() -> {
-                state.registers[opcode.and(0x0F00.toShort()).toInt().shr(8)] =
-                    (state.registers[opcode.and(0x0F00.toShort()).toInt().shr(8)] +
-                            opcode.and(0x00FF.toShort()).toByte()).toByte()
+                val register = opcode.and(0x0F00.toShort()).toInt().shr(8)
+                val value = opcode.and(0x00FF.toShort()).toByte()
+                state.registers[register] = (state.registers[register] + value).toByte()
             }
             opcode.and(0xF000.toShort()) == 0xA000.toShort() -> {
                 state.index = opcode.and(0x0FFF)
             }
-            opcode.and(0xD000.toShort()) == 0xD000.toShort() -> {
-                val x = state.registers[opcode.and(0x0F00).toInt().shr(16)]
-                val y = state.registers[opcode.and(0x00F0).toInt().shr(8)]
+            opcode.and(0xF000.toShort()) == 0xD000.toShort() -> {
+                val registerX = opcode.and(0x0F00).toInt().shr(8)
+                val registerY = opcode.and(0x00F0).toInt().shr(4)
+                println("Register $registerX $registerY ${state.registers.map { it.toString(16) }}")
+                val x = state.registers[registerX]
+                val y = state.registers[registerY]
                 val rows = opcode.and(0x000F).toInt()
                 val sprite = state.memory.copyOfRange(state.index.toInt(), state.index.toInt() + rows)
                 display.drawSprite(x, y, sprite)
             }
-            else -> TODO("Not yet implemented")
+            else -> {}//TODO("Not yet implemented ${opcode.toUInt().toString(16)}")
         }
     }
 

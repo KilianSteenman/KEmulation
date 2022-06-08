@@ -2,6 +2,7 @@ package com.kiliansteenman.kemulation.chip8
 
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 internal class CpuTest {
@@ -22,11 +23,11 @@ internal class CpuTest {
     fun whenClearScreenOpcodeIsCalled_thenScreenIsCleared() {
         val cpu = Cpu(display = display)
 
-        display.pixels[0] = true
+        display.pixels[0][0] = true
 
         cpu.executeOpcode(0x00E0)
 
-        assertTrue { display.pixels.all { !it } }
+        assertFalse { display.pixels[0][0] }
     }
 
     @Test
