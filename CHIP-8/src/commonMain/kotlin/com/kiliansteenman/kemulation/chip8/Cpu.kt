@@ -93,6 +93,13 @@ class Cpu(
                 val registerY = opcode.and(0x00F0).toInt().shr(4)
                 state.registers[registerX] = state.registers[registerY]
             }
+            opcode.and(0xF000.toShort()) == 0x9000.toShort() -> {
+                val registerX = opcode.and(0x0F00).toInt().shr(8)
+                val registerY = opcode.and(0x00F0).toInt().shr(4)
+                if (state.registers[registerX] != state.registers[registerY]) {
+                    state.increaseProgramCounter()
+                }
+            }
             opcode.and(0xF000.toShort()) == 0xA000.toShort() -> {
                 state.index = opcode.and(0x0FFF)
             }
