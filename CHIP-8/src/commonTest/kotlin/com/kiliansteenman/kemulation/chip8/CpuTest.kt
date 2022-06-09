@@ -127,4 +127,28 @@ internal class CpuTest {
 
         assertEquals(2.toShort(), state.programCounter)
     }
+
+    @Test
+    fun whenSkipWhenRegistersAreEqualIsCalled_andValueIsEqual_thenNextInstructionIsSkipped() {
+        val state = CpuState()
+        val cpu = Cpu(state, display)
+
+        state.registers[2] = 0x37
+        state.registers[3] = 0x37
+        cpu.executeOpcode(0x5230.toShort())
+
+        assertEquals(2.toShort(), state.programCounter)
+    }
+
+    @Test
+    fun whenSkipWhenRegistersAreEqualIsCalled_andValueIsNotEqual_thenNextInstructionIsNotSkipped() {
+        val state = CpuState()
+        val cpu = Cpu(state, display)
+
+        state.registers[2] = 0x37
+        state.registers[3] = 0x36
+        cpu.executeOpcode(0x5230.toShort())
+
+        assertEquals(0.toShort(), state.programCounter)
+    }
 }
