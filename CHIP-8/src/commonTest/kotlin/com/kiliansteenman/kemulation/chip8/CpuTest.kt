@@ -231,4 +231,24 @@ internal class CpuTest {
         assertEquals(0x0200.toShort(), state.programCounter)
         assertTrue(state.stack.isEmpty())
     }
+
+    @Test
+    fun whenStoreRegistersIsCalled_thenRegistersAreStoredInMemoryAtIndex() {
+        val state = CpuState()
+        val cpu = Cpu(state, display)
+
+        state.index = 0x0250
+        state.registers[0] = 0
+        state.registers[1] = 1
+        state.registers[2] = 2
+        state.registers[3] = 3
+
+        cpu.executeOpcode(0xF455.toShort())
+
+        assertEquals(0, state.memory[0x0250])
+        assertEquals(1, state.memory[0x0251])
+        assertEquals(2, state.memory[0x0252])
+        assertEquals(3, state.memory[0x0253])
+        assertEquals(0, state.memory[0x0254])
+    }
 }
