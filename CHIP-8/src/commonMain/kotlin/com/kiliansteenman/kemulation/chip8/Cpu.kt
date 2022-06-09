@@ -53,7 +53,12 @@ class Cpu(
 
     fun executeOpcode(opcode: Short) {
         when {
-            opcode == 0x00E0.toShort() -> display.clear()
+            opcode == 0x00E0.toShort() -> {
+                display.clear()
+            }
+            opcode == 0x00EE.toShort() -> {
+                state.setProgramCounter(state.stack.removeFirst())
+            }
             opcode.and(0xF000.toShort()) == 0x1000.toShort() -> {
                 state.setProgramCounter(opcode.and(0x0FFF))
             }

@@ -217,4 +217,18 @@ internal class CpuTest {
         assertEquals(0x0250.toShort(), state.programCounter)
         assertEquals(0x0242.toShort(), state.stack.first())
     }
+
+    @Test
+    fun whenReturnFromSubroutineIsCalled_thenProgramCounterIsRestored() {
+        val state = CpuState()
+        val cpu = Cpu(state, display)
+
+        state.setProgramCounter(0x0200.toShort())
+
+        cpu.executeOpcode(0x2242.toShort())
+        cpu.executeOpcode(0x00EE.toShort())
+
+        assertEquals(0x0200.toShort(), state.programCounter)
+        assertTrue(state.stack.isEmpty())
+    }
 }
