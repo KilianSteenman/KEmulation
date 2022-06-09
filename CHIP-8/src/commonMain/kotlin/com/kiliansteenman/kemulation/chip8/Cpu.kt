@@ -96,10 +96,6 @@ class Cpu(
             opcode.and(0xF000.toShort()) == 0xA000.toShort() -> {
                 state.index = opcode.and(0x0FFF)
             }
-            opcode.and(0xF0FF.toShort()) == 0xF015.toShort() -> {
-                val register = opcode.and(0x0F00).toInt().shr(8)
-                state.delayTimer = state.registers[register]
-            }
             opcode.and(0xF000.toShort()) == 0xD000.toShort() -> {
                 val registerX = opcode.and(0x0F00).toInt().shr(8)
                 val registerY = opcode.and(0x00F0).toInt().shr(4)
@@ -109,6 +105,14 @@ class Cpu(
                 val rows = opcode.and(0x000F).toInt()
                 val sprite = state.memory.copyOfRange(state.index.toInt(), state.index.toInt() + rows)
                 display.drawSprite(x, y, sprite)
+            }
+            opcode.and(0xF0FF.toShort()) == 0xF015.toShort() -> {
+                val register = opcode.and(0x0F00).toInt().shr(8)
+                state.delayTimer = state.registers[register]
+            }
+            opcode.and(0xF0FF.toShort()) == 0xF029.toShort() -> {
+                val register = opcode.and(0x0F00).toInt().shr(8)
+                state.index = (FONT_OFFSET + (state.registers[register] * 5)).toShort()
             }
             else -> TODO("Not yet implemented ${opcode.toUShort().toString(16)}")
         }

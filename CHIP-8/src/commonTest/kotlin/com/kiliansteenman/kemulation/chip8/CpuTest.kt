@@ -163,4 +163,18 @@ internal class CpuTest {
 
         assertEquals(0x12, state.registers[2])
     }
+
+    @Test
+    fun whenPointIndexToCharacterIsCalled_thenIndexIsSetToPointToCharacter() {
+        val state = CpuState()
+        val cpu = Cpu(state, display)
+
+        state.registers[1] = 0x0 // 0
+        cpu.executeOpcode(0xF129.toShort())
+        assertEquals(0x050.toShort(), state.index)
+
+        state.registers[1] = 0x1 // 1
+        cpu.executeOpcode(0xF129.toShort())
+        assertEquals(0x055.toShort(), state.index)
+    }
 }
