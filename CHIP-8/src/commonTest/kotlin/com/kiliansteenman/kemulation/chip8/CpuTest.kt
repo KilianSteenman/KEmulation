@@ -201,4 +201,20 @@ internal class CpuTest {
         cpu.executeOpcode(0xF129.toShort())
         assertEquals(0x055.toShort(), state.index)
     }
+
+    @Test
+    fun whenJumpToSubroutineIsCalled_thenProgramCounterIsUpdated_andAddressIsStored() {
+        val state = CpuState()
+        val cpu = Cpu(state, display)
+
+        state.setProgramCounter(0x0200.toShort())
+
+        cpu.executeOpcode(0x2242.toShort())
+        assertEquals(0x0242.toShort(), state.programCounter)
+        assertEquals(0x0200.toShort(), state.stack.first())
+
+        cpu.executeOpcode(0x2250.toShort())
+        assertEquals(0x0250.toShort(), state.programCounter)
+        assertEquals(0x0242.toShort(), state.stack.first())
+    }
 }

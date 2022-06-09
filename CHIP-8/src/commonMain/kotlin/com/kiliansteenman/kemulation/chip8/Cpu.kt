@@ -57,6 +57,10 @@ class Cpu(
             opcode.and(0xF000.toShort()) == 0x1000.toShort() -> {
                 state.setProgramCounter(opcode.and(0x0FFF))
             }
+            opcode.and(0xF000.toShort()) == 0x2000.toShort() -> {
+                state.stack.addFirst(state.programCounter)
+                state.setProgramCounter(opcode.and(0x0FFF))
+            }
             opcode.and(0xF000.toShort()) == 0x3000.toShort() -> {
                 val register = opcode.and(0x0F00).toInt().shr(8)
                 val value = opcode.and(0x00FF).toByte()
