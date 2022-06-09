@@ -151,4 +151,16 @@ internal class CpuTest {
 
         assertEquals(0.toShort(), state.programCounter)
     }
+
+    @Test
+    fun whenMoveRegisterIsCalled_thenValueOfRegisterIsMoved() {
+        val state = CpuState()
+        val cpu = Cpu(state, display)
+
+        state.registers[2] = 0x37
+        state.registers[3] = 0x12
+        cpu.executeOpcode(0x8230.toShort())
+
+        assertEquals(0x12, state.registers[2])
+    }
 }
