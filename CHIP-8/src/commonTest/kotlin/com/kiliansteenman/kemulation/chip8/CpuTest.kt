@@ -292,7 +292,7 @@ internal class CpuTest {
         val state = CpuState()
         val cpu = Cpu(state, display)
 
-        state.registers[1] = 0xF0.toUByte()
+        state.registers[1] = 0xFE.toUByte()
         state.registers[2] = 0x0E.toUByte()
 
         cpu.executeOpcode(0x8121.toShort())
@@ -311,5 +311,18 @@ internal class CpuTest {
         cpu.executeOpcode(0x8122.toShort())
 
         assertEquals(0xA2.toUByte(), state.registers[1])
+    }
+
+    @Test
+    fun whenStoreXORValueInRegister_thenXORValueIsStored() {
+        val state = CpuState()
+        val cpu = Cpu(state, display)
+
+        state.registers[1] = 0xFE.toUByte()
+        state.registers[2] = 0x0E.toUByte()
+
+        cpu.executeOpcode(0x8123.toShort())
+
+        assertEquals(0xF0.toUByte(), state.registers[1])
     }
 }
