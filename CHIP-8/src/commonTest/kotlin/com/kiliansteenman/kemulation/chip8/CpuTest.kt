@@ -353,4 +353,18 @@ internal class CpuTest {
         assertEquals(0x00.toUByte(), state.registers[1])
         assertEquals(0x01.toUByte(), state.registers[0xF])
     }
+
+    @Test
+    fun whenStoreSubtractValueInRegisterAndValueOverflows_thenSubtractValueIsStoredAndFlagIsSet() {
+        val state = CpuState()
+        val cpu = Cpu(state, display)
+
+        state.registers[1] = 0xFF.toUByte()
+        state.registers[2] = 0x01.toUByte()
+
+        cpu.executeOpcode(0x8125.toShort())
+
+        assertEquals(0xFE.toUByte(), state.registers[1])
+        assertEquals(0x00.toUByte(), state.registers[0xF])
+    }
 }
