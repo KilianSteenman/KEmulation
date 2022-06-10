@@ -367,4 +367,17 @@ internal class CpuTest {
         assertEquals(0xFE.toUByte(), state.registers[1])
         assertEquals(0x00.toUByte(), state.registers[0xF])
     }
+
+    @Test
+    fun whenShiftRegisterLeft_thenRegisterIsShiftedLeft() {
+        val state = CpuState()
+        val cpu = Cpu(state, display)
+
+        state.registers[1] = 0x01.toUByte()
+
+        cpu.executeOpcode(0x812E.toShort())
+
+        assertEquals(0x02.toUByte(), state.registers[1])
+        assertEquals(0x00.toUByte(), state.registers[0xF])
+    }
 }
