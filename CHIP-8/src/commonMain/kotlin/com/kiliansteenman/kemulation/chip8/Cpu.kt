@@ -43,6 +43,7 @@ class Cpu(
         val opcode = getOpcode()
         state.increaseProgramCounter()
         executeOpcode(opcode)
+        state.delayTimer--
     }
 
     private fun getOpcode(): Short {

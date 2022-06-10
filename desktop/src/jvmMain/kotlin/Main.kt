@@ -31,7 +31,7 @@ fun main() = singleWindowApplication(
     var pixels by remember { mutableStateOf(emptyList<Offset>()) }
     LaunchedEffect(Unit) {
         while (true) {
-            delay(((1f / 60) * 1000).toLong())
+            delay(((1f / 60)).toLong())
             cpu.executeProgram()
             pixels = display.enabledPixels
             ticks++
