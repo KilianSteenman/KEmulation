@@ -286,4 +286,17 @@ internal class CpuTest {
         assertEquals(5.toUByte(), state.memory[0x0251])
         assertEquals(5.toUByte(), state.memory[0x0252])
     }
+
+    @Test
+    fun whenStoreOrValueInRegister_thenOrValueIsStored() {
+        val state = CpuState()
+        val cpu = Cpu(state, display)
+
+        state.registers[1] = 0xF0.toUByte()
+        state.registers[2] = 0x0E.toUByte()
+
+        cpu.executeOpcode(0x8121.toShort())
+
+        assertEquals(0xFE.toUByte(), state.registers[1])
+    }
 }

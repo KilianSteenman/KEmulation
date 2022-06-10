@@ -97,10 +97,15 @@ class Cpu(
                 val value = opcode.and(0x00FF.toShort()).toUByte()
                 state.registers[register] = (state.registers[register] + value).toUByte()
             }
-            opcode.and(0xF000.toShort()) == 0x8000.toShort() -> {
+            opcode.and(0xF00F.toShort()) == 0x8000.toShort() -> {
                 val registerX = opcode.and(0x0F00).toInt().shr(8)
                 val registerY = opcode.and(0x00F0).toInt().shr(4)
                 state.registers[registerX] = state.registers[registerY]
+            }
+            opcode.and(0xF00F.toShort()) == 0x8001.toShort() -> {
+                val registerX = opcode.and(0x0F00).toInt().shr(8)
+                val registerY = opcode.and(0x00F0).toInt().shr(4)
+                state.registers[registerX] = state.registers[registerX].or(state.registers[registerY])
             }
             opcode.and(0xF000.toShort()) == 0x9000.toShort() -> {
                 val registerX = opcode.and(0x0F00).toInt().shr(8)
