@@ -160,6 +160,10 @@ class Cpu(
                 val sprite = state.memory.copyOfRange(state.index.toInt(), state.index.toInt() + rows)
                 display.drawSprite(x, y, sprite)
             }
+            opcode.and(0xF0FF.toShort()) == 0xF007.toShort() -> {
+                val register = opcode.and(0x0F00).toInt().shr(8)
+                state.registers[register] = state.delayTimer
+            }
             opcode.and(0xF0FF.toShort()) == 0xF015.toShort() -> {
                 val register = opcode.and(0x0F00).toInt().shr(8)
                 state.delayTimer = state.registers[register]

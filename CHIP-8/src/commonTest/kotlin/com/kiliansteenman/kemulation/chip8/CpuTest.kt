@@ -393,4 +393,15 @@ internal class CpuTest {
         assertEquals(0x01.toUByte(), state.registers[1])
         assertEquals(0x00.toUByte(), state.registers[0xF])
     }
+
+    @Test
+    fun whenStoreDelayTimerIsCalled_thenDelayTimerIsStoredInRegister() {
+        val state = CpuState()
+        val cpu = Cpu(state, display)
+
+        state.delayTimer = 0x55.toUByte()
+        cpu.executeOpcode(0xF107.toShort())
+
+        assertEquals(0x55.toUByte(), state.registers[1])
+    }
 }
