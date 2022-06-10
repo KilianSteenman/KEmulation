@@ -132,8 +132,14 @@ class Cpu(
             }
             opcode.and(0xF0FF.toShort()) == 0xF055.toShort() -> {
                 val registerIndex = opcode.and(0x0F00).toInt().shr(8)
-                for(i in 0 .. registerIndex) {
+                for (i in 0..registerIndex) {
                     state.memory[state.index + i] = state.registers[i]
+                }
+            }
+            opcode.and(0xF0FF.toShort()) == 0xF065.toShort() -> {
+                val registerIndex = opcode.and(0x0F00).toInt().shr(8)
+                for (i in 0 until registerIndex) {
+                    state.registers[i] = state.memory[state.index + i]
                 }
             }
             else -> TODO("Not yet implemented ${opcode.toUShort().toString(16)}")

@@ -251,4 +251,25 @@ internal class CpuTest {
         assertEquals(3, state.memory[0x0253])
         assertEquals(0, state.memory[0x0254])
     }
+
+    @Test
+    fun whenLoadRegistersIsCalled_thenMemoryIsStoredInRegisters() {
+        val state = CpuState()
+        val cpu = Cpu(state, display)
+
+        state.index = 0x0250
+        state.memory[0x0250] = 0
+        state.memory[0x0251] = 1
+        state.memory[0x0252] = 2
+        state.memory[0x0253] = 3
+        state.memory[0x0254] = 4
+
+        cpu.executeOpcode(0xF465.toShort())
+
+        assertEquals(0, state.registers[0])
+        assertEquals(1, state.registers[1])
+        assertEquals(2, state.registers[2])
+        assertEquals(3, state.registers[3])
+        assertEquals(0, state.registers[4])
+    }
 }
