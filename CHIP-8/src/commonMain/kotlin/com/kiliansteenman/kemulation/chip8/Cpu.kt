@@ -1,6 +1,7 @@
 package com.kiliansteenman.kemulation.chip8
 
 import kotlin.experimental.and
+import kotlin.random.Random
 
 class CpuState {
     private var _programCounter: Short = 0
@@ -26,7 +27,8 @@ class CpuState {
 
 class Cpu(
     private val state: CpuState = CpuState(),
-    private val display: Display
+    private val display: Display,
+    private val rng: Random = Random.Default
 ) {
 
     init {
@@ -150,6 +152,11 @@ class Cpu(
             }
             opcode.and(0xF000.toShort()) == 0xA000.toShort() -> {
                 state.index = opcode.and(0x0FFF)
+            }
+            opcode.and(0xF000.toShort()) == 0xC000.toShort() -> {
+                val registerX = opcode.and(0x0F00).toInt().shr(8)
+                val maxValue = opcode.and(0x00FF).toUByte()
+                state.registers[registerX] = rng.nextInt(maxValue.toInt()).toUByte()
             }
             opcode.and(0xF000.toShort()) == 0xD000.toShort() -> {
                 val registerX = opcode.and(0x0F00).toInt().shr(8)

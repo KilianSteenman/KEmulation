@@ -1,5 +1,6 @@
 package com.kiliansteenman.kemulation.chip8
 
+import kotlin.random.Random
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -403,5 +404,33 @@ internal class CpuTest {
         cpu.executeOpcode(0xF107.toShort())
 
         assertEquals(0x55.toUByte(), state.registers[1])
+    }
+
+    @Test
+    fun whenGenerateRandomNumberIsCalled_thenRandomNumberIsStored() {
+        val state = CpuState()
+        val random = TestRandom(0x7)
+        val cpu = Cpu(state, display, random)
+
+        cpu.executeOpcode(0xC112.toShort())
+
+        assertEquals(0x12, random.passedMaxValue)
+        assertEquals(0x7.toUByte(), state.registers[1])
+    }
+}
+
+private class TestRandom(
+    var nextInt: Int = 0
+) : Random() {
+
+    var passedMaxValue: Int = 0
+
+    override fun nextBits(bitCount: Int): Int {
+        return 0
+    }
+
+    override fun nextInt(until: Int): Int {
+        passedMaxValue = until
+        return nextInt
     }
 }
