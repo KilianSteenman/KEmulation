@@ -117,6 +117,13 @@ class Cpu(
                 val registerY = opcode.and(0x00F0).toInt().shr(4)
                 state.registers[registerX] = state.registers[registerX].xor(state.registers[registerY])
             }
+            opcode.and(0xF00F.toShort()) == 0x8004.toShort() -> {
+                val registerX = opcode.and(0x0F00).toInt().shr(8)
+                val registerY = opcode.and(0x00F0).toInt().shr(4)
+                val valueX = state.registers[registerX]
+                state.registers[registerX] = valueX.plus(state.registers[registerY]).toUByte()
+                state.registers[0xF] = if (state.registers[registerX] < valueX) 0x1.toUByte() else 0x0.toUByte()
+            }
             opcode.and(0xF000.toShort()) == 0x9000.toShort() -> {
                 val registerX = opcode.and(0x0F00).toInt().shr(8)
                 val registerY = opcode.and(0x00F0).toInt().shr(4)
