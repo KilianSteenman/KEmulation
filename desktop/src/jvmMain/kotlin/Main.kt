@@ -57,6 +57,6 @@ fun Int.toOffset(): Offset {
     return Offset(y.toFloat(), x.toFloat())
 }
 
-fun loadRom(path: String): ByteArray {
-    return File(path).readBytes()
+fun loadRom(path: String): UByteArray {
+    return File(path).readBytes().toUByteArray()
 }

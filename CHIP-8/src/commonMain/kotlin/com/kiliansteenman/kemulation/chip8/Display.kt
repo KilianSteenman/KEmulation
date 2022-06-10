@@ -13,29 +13,29 @@ class Display(
         pixels.forEachIndexed { index, _ -> pixels[index] = false }
     }
 
-    fun drawSprite(xOffset: Byte, yOffset: Byte, sprite: ByteArray) {
+    fun drawSprite(xOffset: UByte, yOffset: UByte, sprite: UByteArray) {
         var x = xOffset.toInt() % width
         var y = yOffset.toInt() % height
 
         println("Drawing at $x ($xOffset) $y ($yOffset) : ${sprite.map { it.toString(2) }}")
 
         sprite.forEach { spriteByte ->
-            writePixel(x, y, spriteByte.and(0x80.toByte()) == 0x80.toByte())
+            writePixel(x, y, spriteByte.and(0x80.toUByte()) == 0x80.toUByte())
             x++
-            writePixel(x, y, spriteByte.and(0x40.toByte()) == 0x40.toByte())
+            writePixel(x, y, spriteByte.and(0x40.toUByte()) == 0x40.toUByte())
             x++
-            writePixel(x, y, spriteByte.and(0x20.toByte()) == 0x20.toByte())
+            writePixel(x, y, spriteByte.and(0x20.toUByte()) == 0x20.toUByte())
             x++
-            writePixel(x, y, spriteByte.and(0x10.toByte()) == 0x10.toByte())
+            writePixel(x, y, spriteByte.and(0x10.toUByte()) == 0x10.toUByte())
             x++
 
-            writePixel(x, y, spriteByte.and(0x08.toByte()) == 0x08.toByte())
+            writePixel(x, y, spriteByte.and(0x08.toUByte()) == 0x08.toUByte())
             x++
-            writePixel(x, y, spriteByte.and(0x04.toByte()) == 0x04.toByte())
+            writePixel(x, y, spriteByte.and(0x04.toUByte()) == 0x04.toUByte())
             x++
-            writePixel(x, y, spriteByte.and(0x02.toByte()) == 0x02.toByte())
+            writePixel(x, y, spriteByte.and(0x02.toUByte()) == 0x02.toUByte())
             x++
-            writePixel(x, y, spriteByte.and(0x01.toByte()) == 0x01.toByte())
+            writePixel(x, y, spriteByte.and(0x01.toUByte()) == 0x01.toUByte())
             x++
 
             y++

@@ -9,10 +9,10 @@ class CpuState {
 
     var index: Short = 0
     var stack = ArrayDeque<Short>()
-    var delayTimer: Byte = 60
-    var soundTimer: Byte = 0
-    var registers = ByteArray(16) { 0 }
-    var memory = ByteArray(4096)
+    var delayTimer: UByte = 60.toUByte()
+    var soundTimer: UByte = 0.toUByte()
+    var registers = UByteArray(16) { 0.toUByte() }
+    var memory = UByteArray(4096)
 
     fun increaseProgramCounter() {
         _programCounter++
@@ -30,10 +30,10 @@ class Cpu(
 ) {
 
     init {
-        font.copyInto(state.memory, FONT_OFFSET)
+        font.copyInto(state.memory, FONT_OFFSET.toInt())
     }
 
-    fun loadProgram(program: ByteArray) {
+    fun loadProgram(program: UByteArray) {
         // TODO: Write tests for this
         program.copyInto(state.memory, PROGRAM_OFFSET)
         state.setProgramCounter(PROGRAM_OFFSET.toShort())
@@ -48,7 +48,7 @@ class Cpu(
     private fun getOpcode(): Short {
         val pc = state.programCounter.toInt()
         return state.memory[pc].toUInt().shl(8)
-            .or(state.memory[pc + 1].toUByte().toUInt()).toShort()
+            .or(state.memory[pc + 1].toUInt()).toShort()
     }
 
     fun executeOpcode(opcode: Short) {
@@ -68,14 +68,14 @@ class Cpu(
             }
             opcode.and(0xF000.toShort()) == 0x3000.toShort() -> {
                 val register = opcode.and(0x0F00).toInt().shr(8)
-                val value = opcode.and(0x00FF).toByte()
+                val value = opcode.and(0x00FF).toUByte()
                 if (state.registers[register] == value) {
                     state.increaseProgramCounter()
                 }
             }
             opcode.and(0xF000.toShort()) == 0x4000.toShort() -> {
                 val register = opcode.and(0x0F00).toInt().shr(8)
-                val value = opcode.and(0x00FF).toByte()
+                val value = opcode.and(0x00FF).toUByte()
                 if (state.registers[register] != value) {
                     state.increaseProgramCounter()
                 }
@@ -89,13 +89,13 @@ class Cpu(
             }
             opcode.and(0xF000.toShort()) == 0x6000.toShort() -> {
                 val register = opcode.and(0x0F00).toInt().shr(8)
-                val value = opcode.and(0x00FF).toByte()
+                val value = opcode.and(0x00FF).toUByte()
                 state.registers[register] = value
             }
             opcode.and(0xF000.toShort()) == 0x7000.toShort() -> {
                 val register = opcode.and(0x0F00.toShort()).toInt().shr(8)
-                val value = opcode.and(0x00FF.toShort()).toByte()
-                state.registers[register] = (state.registers[register] + value).toByte()
+                val value = opcode.and(0x00FF.toShort()).toUByte()
+                state.registers[register] = (state.registers[register] + value).toUByte()
             }
             opcode.and(0xF000.toShort()) == 0x8000.toShort() -> {
                 val registerX = opcode.and(0x0F00).toInt().shr(8)
@@ -128,7 +128,14 @@ class Cpu(
             }
             opcode.and(0xF0FF.toShort()) == 0xF029.toShort() -> {
                 val register = opcode.and(0x0F00).toInt().shr(8)
-                state.index = (FONT_OFFSET + (state.registers[register] * 5)).toShort()
+                state.index = (FONT_OFFSET + (state.registers[register] * 5.toUInt())).toShort()
+            }
+            opcode.and(0xF0FF.toShort()) == 0xF033.toShort() -> {
+                val register = opcode.and(0x0F00).toInt().shr(8)
+                val value = state.registers[register].toInt()
+                state.memory[state.index.toInt()] = (value / 100).toUByte()
+                state.memory[state.index.toInt() + 1] = (value / 10 % 10).toUByte()
+                state.memory[state.index.toInt() + 2] = (value % 100 % 10).toUByte()
             }
             opcode.and(0xF0FF.toShort()) == 0xF055.toShort() -> {
                 val registerIndex = opcode.and(0x0F00).toInt().shr(8)
@@ -148,26 +155,26 @@ class Cpu(
 
     companion object {
 
-        private const val FONT_OFFSET = 0x050
+        private val FONT_OFFSET: UByte = 0x050.toUByte()
         private const val PROGRAM_OFFSET = 0x200
 
-        private val font = byteArrayOf(
-            0xF0.toByte(), 0x90.toByte(), 0x90.toByte(), 0x90.toByte(), 0xF0.toByte(), // 0
-            0x20.toByte(), 0x60.toByte(), 0x20.toByte(), 0x20.toByte(), 0x70.toByte(), // 1
-            0xF0.toByte(), 0x10.toByte(), 0xF0.toByte(), 0x80.toByte(), 0xF0.toByte(), // 2
-            0xF0.toByte(), 0x10.toByte(), 0xF0.toByte(), 0x10.toByte(), 0xF0.toByte(), // 3
-            0x90.toByte(), 0x90.toByte(), 0xF0.toByte(), 0x10.toByte(), 0x10.toByte(), // 4
-            0xF0.toByte(), 0x80.toByte(), 0xF0.toByte(), 0x10.toByte(), 0xF0.toByte(), // 5
-            0xF0.toByte(), 0x80.toByte(), 0xF0.toByte(), 0x90.toByte(), 0xF0.toByte(), // 6
-            0xF0.toByte(), 0x10.toByte(), 0x20.toByte(), 0x40.toByte(), 0x40.toByte(), // 7
-            0xF0.toByte(), 0x90.toByte(), 0xF0.toByte(), 0x90.toByte(), 0xF0.toByte(), // 8
-            0xF0.toByte(), 0x90.toByte(), 0xF0.toByte(), 0x10.toByte(), 0xF0.toByte(), // 9
-            0xF0.toByte(), 0x90.toByte(), 0xF0.toByte(), 0x90.toByte(), 0x90.toByte(), // A
-            0xE0.toByte(), 0x90.toByte(), 0xE0.toByte(), 0x90.toByte(), 0xE0.toByte(), // B
-            0xF0.toByte(), 0x80.toByte(), 0x80.toByte(), 0x80.toByte(), 0xF0.toByte(), // C
-            0xE0.toByte(), 0x90.toByte(), 0x90.toByte(), 0x90.toByte(), 0xE0.toByte(), // D
-            0xF0.toByte(), 0x80.toByte(), 0xF0.toByte(), 0x80.toByte(), 0xF0.toByte(), // E
-            0xF0.toByte(), 0x80.toByte(), 0xF0.toByte(), 0x80.toByte(), 0x80.toByte()  // F
+        private val font = ubyteArrayOf(
+            0xF0.toUByte(), 0x90.toUByte(), 0x90.toUByte(), 0x90.toUByte(), 0xF0.toUByte(), // 0
+            0x20.toUByte(), 0x60.toUByte(), 0x20.toUByte(), 0x20.toUByte(), 0x70.toUByte(), // 1
+            0xF0.toUByte(), 0x10.toUByte(), 0xF0.toUByte(), 0x80.toUByte(), 0xF0.toUByte(), // 2
+            0xF0.toUByte(), 0x10.toUByte(), 0xF0.toUByte(), 0x10.toUByte(), 0xF0.toUByte(), // 3
+            0x90.toUByte(), 0x90.toUByte(), 0xF0.toUByte(), 0x10.toUByte(), 0x10.toUByte(), // 4
+            0xF0.toUByte(), 0x80.toUByte(), 0xF0.toUByte(), 0x10.toUByte(), 0xF0.toUByte(), // 5
+            0xF0.toUByte(), 0x80.toUByte(), 0xF0.toUByte(), 0x90.toUByte(), 0xF0.toUByte(), // 6
+            0xF0.toUByte(), 0x10.toUByte(), 0x20.toUByte(), 0x40.toUByte(), 0x40.toUByte(), // 7
+            0xF0.toUByte(), 0x90.toUByte(), 0xF0.toUByte(), 0x90.toUByte(), 0xF0.toUByte(), // 8
+            0xF0.toUByte(), 0x90.toUByte(), 0xF0.toUByte(), 0x10.toUByte(), 0xF0.toUByte(), // 9
+            0xF0.toUByte(), 0x90.toUByte(), 0xF0.toUByte(), 0x90.toUByte(), 0x90.toUByte(), // A
+            0xE0.toUByte(), 0x90.toUByte(), 0xE0.toUByte(), 0x90.toUByte(), 0xE0.toUByte(), // B
+            0xF0.toUByte(), 0x80.toUByte(), 0x80.toUByte(), 0x80.toUByte(), 0xF0.toUByte(), // C
+            0xE0.toUByte(), 0x90.toUByte(), 0x90.toUByte(), 0x90.toUByte(), 0xE0.toUByte(), // D
+            0xF0.toUByte(), 0x80.toUByte(), 0xF0.toUByte(), 0x80.toUByte(), 0xF0.toUByte(), // E
+            0xF0.toUByte(), 0x80.toUByte(), 0xF0.toUByte(), 0x80.toUByte(), 0x80.toUByte()  // F
         )
     }
 }

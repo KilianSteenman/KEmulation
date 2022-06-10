@@ -15,8 +15,8 @@ internal class CpuTest {
         Cpu(state, display)
 
         // Checking the first and last part is fine for now
-        assertEquals(0xF0.toByte(), state.memory[0x050])
-        assertEquals(0x80.toByte(), state.memory[0x09F])
+        assertEquals(0xF0.toUByte(), state.memory[0x050])
+        assertEquals(0x80.toUByte(), state.memory[0x09F])
     }
 
     @Test
@@ -47,7 +47,7 @@ internal class CpuTest {
 
         cpu.executeOpcode(0x6227)
 
-        assertEquals(0x27.toByte(), state.registers[2])
+        assertEquals(0x27.toUByte(), state.registers[2])
     }
 
     @Test
@@ -57,11 +57,11 @@ internal class CpuTest {
 
         // First add 1
         cpu.executeOpcode(0x7201)
-        assertEquals(0x01.toByte(), state.registers[2])
+        assertEquals(0x01.toUByte(), state.registers[2])
 
         // Now add another 2
         cpu.executeOpcode(0x7202)
-        assertEquals(0x03.toByte(), state.registers[2])
+        assertEquals(0x03.toUByte(), state.registers[2])
     }
 
     @Test
@@ -78,10 +78,10 @@ internal class CpuTest {
         val state = CpuState()
         val cpu = Cpu(state, display)
 
-        state.registers[2] = 37
+        state.registers[2] = 37.toUByte()
         cpu.executeOpcode(0xF215.toShort())
 
-        assertEquals(37, state.delayTimer)
+        assertEquals(37.toUByte(), state.delayTimer)
     }
 
     @Test
@@ -89,7 +89,7 @@ internal class CpuTest {
         val state = CpuState()
         val cpu = Cpu(state, display)
 
-        state.registers[2] = 0x37
+        state.registers[2] = 0x37.toUByte()
         cpu.executeOpcode(0x3237.toShort())
 
         assertEquals(2.toShort(), state.programCounter)
@@ -100,7 +100,7 @@ internal class CpuTest {
         val state = CpuState()
         val cpu = Cpu(state, display)
 
-        state.registers[2] = 0x36
+        state.registers[2] = 0x36.toUByte()
         cpu.executeOpcode(0x3237.toShort())
 
         assertEquals(0.toShort(), state.programCounter)
@@ -111,7 +111,7 @@ internal class CpuTest {
         val state = CpuState()
         val cpu = Cpu(state, display)
 
-        state.registers[2] = 0x37
+        state.registers[2] = 0x37.toUByte()
         cpu.executeOpcode(0x4237.toShort())
 
         assertEquals(0.toShort(), state.programCounter)
@@ -122,7 +122,7 @@ internal class CpuTest {
         val state = CpuState()
         val cpu = Cpu(state, display)
 
-        state.registers[2] = 0x36
+        state.registers[2] = 0x36.toUByte()
         cpu.executeOpcode(0x4237.toShort())
 
         assertEquals(2.toShort(), state.programCounter)
@@ -133,8 +133,8 @@ internal class CpuTest {
         val state = CpuState()
         val cpu = Cpu(state, display)
 
-        state.registers[2] = 0x37
-        state.registers[3] = 0x37
+        state.registers[2] = 0x37.toUByte()
+        state.registers[3] = 0x37.toUByte()
         cpu.executeOpcode(0x5230.toShort())
 
         assertEquals(2.toShort(), state.programCounter)
@@ -145,8 +145,8 @@ internal class CpuTest {
         val state = CpuState()
         val cpu = Cpu(state, display)
 
-        state.registers[2] = 0x37
-        state.registers[3] = 0x36
+        state.registers[2] = 0x37.toUByte()
+        state.registers[3] = 0x36.toUByte()
         cpu.executeOpcode(0x5230.toShort())
 
         assertEquals(0.toShort(), state.programCounter)
@@ -157,8 +157,8 @@ internal class CpuTest {
         val state = CpuState()
         val cpu = Cpu(state, display)
 
-        state.registers[2] = 0x37
-        state.registers[3] = 0x36
+        state.registers[2] = 0x37.toUByte()
+        state.registers[3] = 0x36.toUByte()
         cpu.executeOpcode(0x9230.toShort())
 
         assertEquals(2.toShort(), state.programCounter)
@@ -169,8 +169,8 @@ internal class CpuTest {
         val state = CpuState()
         val cpu = Cpu(state, display)
 
-        state.registers[2] = 0x37
-        state.registers[3] = 0x37
+        state.registers[2] = 0x37.toUByte()
+        state.registers[3] = 0x37.toUByte()
         cpu.executeOpcode(0x9230.toShort())
 
         assertEquals(0.toShort(), state.programCounter)
@@ -181,11 +181,11 @@ internal class CpuTest {
         val state = CpuState()
         val cpu = Cpu(state, display)
 
-        state.registers[2] = 0x37
-        state.registers[3] = 0x12
+        state.registers[2] = 0x37.toUByte()
+        state.registers[3] = 0x12.toUByte()
         cpu.executeOpcode(0x8230.toShort())
 
-        assertEquals(0x12, state.registers[2])
+        assertEquals(0x12.toUByte(), state.registers[2])
     }
 
     @Test
@@ -193,11 +193,11 @@ internal class CpuTest {
         val state = CpuState()
         val cpu = Cpu(state, display)
 
-        state.registers[1] = 0x0 // 0
+        state.registers[1] = 0x0.toUByte() // 0
         cpu.executeOpcode(0xF129.toShort())
         assertEquals(0x050.toShort(), state.index)
 
-        state.registers[1] = 0x1 // 1
+        state.registers[1] = 0x1.toUByte() // 1
         cpu.executeOpcode(0xF129.toShort())
         assertEquals(0x055.toShort(), state.index)
     }
@@ -238,18 +238,18 @@ internal class CpuTest {
         val cpu = Cpu(state, display)
 
         state.index = 0x0250
-        state.registers[0] = 0
-        state.registers[1] = 1
-        state.registers[2] = 2
-        state.registers[3] = 3
+        state.registers[0] = 0.toUByte()
+        state.registers[1] = 1.toUByte()
+        state.registers[2] = 2.toUByte()
+        state.registers[3] = 3.toUByte()
 
         cpu.executeOpcode(0xF455.toShort())
 
-        assertEquals(0, state.memory[0x0250])
-        assertEquals(1, state.memory[0x0251])
-        assertEquals(2, state.memory[0x0252])
-        assertEquals(3, state.memory[0x0253])
-        assertEquals(0, state.memory[0x0254])
+        assertEquals(0.toUByte(), state.memory[0x0250])
+        assertEquals(1.toUByte(), state.memory[0x0251])
+        assertEquals(2.toUByte(), state.memory[0x0252])
+        assertEquals(3.toUByte(), state.memory[0x0253])
+        assertEquals(0.toUByte(), state.memory[0x0254])
     }
 
     @Test
@@ -258,18 +258,32 @@ internal class CpuTest {
         val cpu = Cpu(state, display)
 
         state.index = 0x0250
-        state.memory[0x0250] = 0
-        state.memory[0x0251] = 1
-        state.memory[0x0252] = 2
-        state.memory[0x0253] = 3
-        state.memory[0x0254] = 4
+        state.memory[0x0250] = 0.toUByte()
+        state.memory[0x0251] = 1.toUByte()
+        state.memory[0x0252] = 2.toUByte()
+        state.memory[0x0253] = 3.toUByte()
+        state.memory[0x0254] = 4.toUByte()
 
         cpu.executeOpcode(0xF465.toShort())
 
-        assertEquals(0, state.registers[0])
-        assertEquals(1, state.registers[1])
-        assertEquals(2, state.registers[2])
-        assertEquals(3, state.registers[3])
-        assertEquals(0, state.registers[4])
+        assertEquals(0.toUByte(), state.registers[0])
+        assertEquals(1.toUByte(), state.registers[1])
+        assertEquals(2.toUByte(), state.registers[2])
+        assertEquals(3.toUByte(), state.registers[3])
+        assertEquals(0.toUByte(), state.registers[4])
+    }
+
+    @Test
+    fun whenStoreBinaryCodedDecimalIsCalled_thenValueIsStored() {
+        val state = CpuState()
+        val cpu = Cpu(state, display)
+
+        state.index = 0x0250
+        state.registers[1] = 0xFF.toUByte()
+        cpu.executeOpcode(0xF133.toShort())
+
+        assertEquals(2.toUByte(), state.memory[0x0250])
+        assertEquals(5.toUByte(), state.memory[0x0251])
+        assertEquals(5.toUByte(), state.memory[0x0252])
     }
 }

@@ -21,7 +21,7 @@ internal class DisplayTest {
     fun whenDrawSpriteIsCalled_thenSpriteIsDrawn() {
         val display = Display(64, 32)
 
-        display.drawSprite(0, 0, byteArrayOf(0x90.toByte()))
+        display.drawSprite(0.toUByte(), 0.toUByte(), ubyteArrayOf(0x90.toUByte()))
 
         assertTrue { display.pixels[0] }
         assertFalse { display.pixels[1] }
@@ -37,7 +37,7 @@ internal class DisplayTest {
     fun whenDrawSpriteIsCalledOutsideTheBoundsOfTheScreen_thenSpriteIsDrawn() {
         val display = Display(64, 32)
 
-        display.drawSprite(68, 34, byteArrayOf(0x90.toByte()))
+        display.drawSprite(68.toUByte(), 34.toUByte(), ubyteArrayOf(0x90.toUByte()))
 
 //        assertTrue { display.pixels[4][2] }
 //        assertFalse { display.pixels[4][3] }
@@ -53,7 +53,7 @@ internal class DisplayTest {
     fun whenPartOfSpriteIsDrawnOutsideTheBounds_thenSpriteIsNotDrawnOutsideTheBounds() {
         val display = Display(64, 32)
 
-        display.drawSprite(60, 0, byteArrayOf(0x90.toByte()))
+        display.drawSprite(60.toUByte(), 0.toUByte(), ubyteArrayOf(0x90.toUByte()))
         assertTrue { display.pixels[60] }
         assertFalse { display.pixels[61] }
         assertFalse { display.pixels[62] }
