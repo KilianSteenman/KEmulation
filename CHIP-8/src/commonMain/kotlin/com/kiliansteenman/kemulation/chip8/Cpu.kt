@@ -189,6 +189,10 @@ class Cpu(
                 val register = opcode.and(0x0F00).toInt().shr(8)
                 state.delayTimer = state.registers[register]
             }
+            opcode.and(0xF0FF.toShort()) == 0xF018.toShort() -> {
+                val register = opcode.and(0x0F00).toInt().shr(8)
+                state.soundTimer = state.registers[register]
+            }
             opcode.and(0xF0FF.toShort()) == 0xF029.toShort() -> {
                 val register = opcode.and(0x0F00).toInt().shr(8)
                 state.index = (FONT_OFFSET + (state.registers[register] * 5.toUInt())).toShort()

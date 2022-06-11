@@ -470,6 +470,18 @@ internal class CpuTest {
 
         assertEquals(2.toShort(), state.programCounter)
     }
+
+    @Test
+    fun whenSetSoundTimerIsCalled_thenSoundTimerIsSet() {
+        val state = CpuState()
+        val cpu = Cpu(state, display, input)
+
+        state.registers[0x1] = 0xFE.toUByte()
+
+        cpu.executeOpcode(0xF118.toShort())
+
+        assertEquals(0xFE.toUByte(), state.soundTimer)
+    }
 }
 
 private class TestRandom(
