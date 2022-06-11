@@ -482,6 +482,19 @@ internal class CpuTest {
 
         assertEquals(0xFE.toUByte(), state.soundTimer)
     }
+
+    @Test
+    fun whenAddRegisterToIndexIsCalled_thenValueIsAddedToIndex() {
+        val state = CpuState()
+        val cpu = Cpu(state, display, input)
+
+        state.index = 0x1
+        state.registers[0x1] = 0x02.toUByte()
+
+        cpu.executeOpcode(0xF11E.toShort())
+
+        assertEquals(0x03, state.index)
+    }
 }
 
 private class TestRandom(
