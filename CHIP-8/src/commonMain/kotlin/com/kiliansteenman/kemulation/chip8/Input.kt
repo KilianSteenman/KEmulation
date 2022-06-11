@@ -1,7 +1,7 @@
 package com.kiliansteenman.kemulation.chip8
 
 class Input {
-    private val keyState = BooleanArray(0xF) { false }
+    private val keyState = BooleanArray(16) { false }
 
     fun isKeyPressed(keyIndex: UByte): Boolean {
         return keyState[keyIndex.toInt()]

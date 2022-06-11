@@ -1,7 +1,5 @@
 package com.kiliansteenman.kemulation.chip8
 
-import kotlin.experimental.and
-
 class Display(
     private val width: Int,
     private val height: Int
