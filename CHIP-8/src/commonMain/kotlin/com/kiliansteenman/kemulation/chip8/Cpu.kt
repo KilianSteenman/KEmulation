@@ -175,6 +175,12 @@ class Cpu(
                     state.increaseProgramCounter()
                 }
             }
+            opcode.and(0xF0FF.toShort()) == 0xE0A1.toShort() -> {
+                val register = opcode.and(0x0F00).toInt().shr(8)
+                if(!input.isKeyPressed(state.registers[register])) {
+                    state.increaseProgramCounter()
+                }
+            }
             opcode.and(0xF0FF.toShort()) == 0xF007.toShort() -> {
                 val register = opcode.and(0x0F00).toInt().shr(8)
                 state.registers[register] = state.delayTimer

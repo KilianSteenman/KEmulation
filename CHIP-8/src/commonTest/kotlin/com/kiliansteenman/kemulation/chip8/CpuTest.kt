@@ -444,6 +444,32 @@ internal class CpuTest {
 
         assertEquals(0.toShort(), state.programCounter)
     }
+
+    @Test
+    fun whenIsKeyNotPressedIsCalled_andKeyIsPressed_thenNextInstructionIsNotSkipped() {
+        val state = CpuState()
+        val cpu = Cpu(state, display, input)
+
+        input.setKeyPressed(keyIndex = 0xA, isPressed = true)
+        state.registers[0x1] = 0xA.toUByte()
+
+        cpu.executeOpcode(0xE1A1.toShort())
+
+        assertEquals(0.toShort(), state.programCounter)
+    }
+
+    @Test
+    fun whenIsKeyNotPressedIsCalled_andKeyIsNotPressed_thenNextInstructionIsSkipped() {
+        val state = CpuState()
+        val cpu = Cpu(state, display, input)
+
+        input.setKeyPressed(keyIndex = 0xA, isPressed = false)
+        state.registers[0x1] = 0xA.toUByte()
+
+        cpu.executeOpcode(0xE1A1.toShort())
+
+        assertEquals(2.toShort(), state.programCounter)
+    }
 }
 
 private class TestRandom(
