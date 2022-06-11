@@ -28,6 +28,7 @@ class CpuState {
 class Cpu(
     private val state: CpuState = CpuState(),
     private val display: Display,
+    private val input: Input,
     private val rng: Random = Random.Default
 ) {
 
@@ -167,6 +168,12 @@ class Cpu(
                 val rows = opcode.and(0x000F).toInt()
                 val sprite = state.memory.copyOfRange(state.index.toInt(), state.index.toInt() + rows)
                 display.drawSprite(x, y, sprite)
+            }
+            opcode.and(0xF0FF.toShort()) == 0xE09E.toShort() -> {
+                val register = opcode.and(0x0F00).toInt().shr(8)
+                if(input.isKeyPressed(state.registers[register])) {
+                    state.increaseProgramCounter()
+                }
             }
             opcode.and(0xF0FF.toShort()) == 0xF007.toShort() -> {
                 val register = opcode.and(0x0F00).toInt().shr(8)

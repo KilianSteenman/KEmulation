@@ -9,11 +9,12 @@ import kotlin.test.assertTrue
 internal class CpuTest {
 
     private val display = Display(1, 1)
+    private val input = Input()
 
     @Test
     fun whenCpuIsCreated_thenFontIsCopiedInMemory() {
         val state = CpuState()
-        Cpu(state, display)
+        Cpu(state, display, input)
 
         // Checking the first and last part is fine for now
         assertEquals(0xF0.toUByte(), state.memory[0x050])
@@ -22,7 +23,7 @@ internal class CpuTest {
 
     @Test
     fun whenClearScreenOpcodeIsCalled_thenScreenIsCleared() {
-        val cpu = Cpu(display = display)
+        val cpu = Cpu(display = display, input = input)
 
         display.pixels[0] = true
 
@@ -34,7 +35,7 @@ internal class CpuTest {
     @Test
     fun whenJumpOpcodeIsCalled_thenProgramCounterIsSetToAddress() {
         val state = CpuState()
-        val cpu = Cpu(state, display)
+        val cpu = Cpu(state, display, input)
 
         cpu.executeOpcode(0x1123)
 
@@ -44,7 +45,7 @@ internal class CpuTest {
     @Test
     fun whenMoveConstantToRegisterIsCalled_thenConstantShouldBeInRegister() {
         val state = CpuState()
-        val cpu = Cpu(state, display)
+        val cpu = Cpu(state, display, input)
 
         cpu.executeOpcode(0x6227)
 
@@ -54,7 +55,7 @@ internal class CpuTest {
     @Test
     fun whenAddConstantToRegisterIsCalled_thenConstantShouldBeAddedToRegister() {
         val state = CpuState()
-        val cpu = Cpu(state, display)
+        val cpu = Cpu(state, display, input)
 
         // First add 1
         cpu.executeOpcode(0x7201)
@@ -68,7 +69,7 @@ internal class CpuTest {
     @Test
     fun whenSetIndexRegisterIsCalled_thenIndexRegisterIsSet() {
         val state = CpuState()
-        val cpu = Cpu(state, display)
+        val cpu = Cpu(state, display, input)
 
         cpu.executeOpcode(0xA123.toShort())
         assertEquals(0x0123, state.index)
@@ -77,7 +78,7 @@ internal class CpuTest {
     @Test
     fun whenSetDelayTimerIsCalled_thenDelayTimerIsSet() {
         val state = CpuState()
-        val cpu = Cpu(state, display)
+        val cpu = Cpu(state, display, input)
 
         state.registers[2] = 37.toUByte()
         cpu.executeOpcode(0xF215.toShort())
@@ -88,7 +89,7 @@ internal class CpuTest {
     @Test
     fun whenSkipWhenTrueIsCalled_andValueIsEqual_thenNextInstructionIsSkipped() {
         val state = CpuState()
-        val cpu = Cpu(state, display)
+        val cpu = Cpu(state, display, input)
 
         state.registers[2] = 0x37.toUByte()
         cpu.executeOpcode(0x3237.toShort())
@@ -99,7 +100,7 @@ internal class CpuTest {
     @Test
     fun whenSkipWhenTrueIsCalled_andValueIsNotEqual_thenNextInstructionIsNotSkipped() {
         val state = CpuState()
-        val cpu = Cpu(state, display)
+        val cpu = Cpu(state, display, input)
 
         state.registers[2] = 0x36.toUByte()
         cpu.executeOpcode(0x3237.toShort())
@@ -110,7 +111,7 @@ internal class CpuTest {
     @Test
     fun whenSkipWhenFalseIsCalled_andValueIsEqual_thenNextInstructionIsNotSkipped() {
         val state = CpuState()
-        val cpu = Cpu(state, display)
+        val cpu = Cpu(state, display, input)
 
         state.registers[2] = 0x37.toUByte()
         cpu.executeOpcode(0x4237.toShort())
@@ -121,7 +122,7 @@ internal class CpuTest {
     @Test
     fun whenSkipWhenFalseIsCalled_andValueIsNotEqual_thenNextInstructionIsSkipped() {
         val state = CpuState()
-        val cpu = Cpu(state, display)
+        val cpu = Cpu(state, display, input)
 
         state.registers[2] = 0x36.toUByte()
         cpu.executeOpcode(0x4237.toShort())
@@ -132,7 +133,7 @@ internal class CpuTest {
     @Test
     fun whenSkipWhenRegistersAreEqualIsCalled_andValueIsEqual_thenNextInstructionIsSkipped() {
         val state = CpuState()
-        val cpu = Cpu(state, display)
+        val cpu = Cpu(state, display, input)
 
         state.registers[2] = 0x37.toUByte()
         state.registers[3] = 0x37.toUByte()
@@ -144,7 +145,7 @@ internal class CpuTest {
     @Test
     fun whenSkipWhenRegistersAreEqualIsCalled_andValueIsNotEqual_thenNextInstructionIsNotSkipped() {
         val state = CpuState()
-        val cpu = Cpu(state, display)
+        val cpu = Cpu(state, display, input)
 
         state.registers[2] = 0x37.toUByte()
         state.registers[3] = 0x36.toUByte()
@@ -156,7 +157,7 @@ internal class CpuTest {
     @Test
     fun whenSkipWhenRegistersAreNotEqualIsCalled_andValueIsNotEqual_thenNextInstructionIsSkipped() {
         val state = CpuState()
-        val cpu = Cpu(state, display)
+        val cpu = Cpu(state, display, input)
 
         state.registers[2] = 0x37.toUByte()
         state.registers[3] = 0x36.toUByte()
@@ -168,7 +169,7 @@ internal class CpuTest {
     @Test
     fun whenSkipWhenRegistersAreNotEqualIsCalled_andValueIsEqual_thenNextInstructionIsNotSkipped() {
         val state = CpuState()
-        val cpu = Cpu(state, display)
+        val cpu = Cpu(state, display, input)
 
         state.registers[2] = 0x37.toUByte()
         state.registers[3] = 0x37.toUByte()
@@ -180,7 +181,7 @@ internal class CpuTest {
     @Test
     fun whenMoveRegisterIsCalled_thenValueOfRegisterIsMoved() {
         val state = CpuState()
-        val cpu = Cpu(state, display)
+        val cpu = Cpu(state, display, input)
 
         state.registers[2] = 0x37.toUByte()
         state.registers[3] = 0x12.toUByte()
@@ -192,7 +193,7 @@ internal class CpuTest {
     @Test
     fun whenPointIndexToCharacterIsCalled_thenIndexIsSetToPointToCharacter() {
         val state = CpuState()
-        val cpu = Cpu(state, display)
+        val cpu = Cpu(state, display, input)
 
         state.registers[1] = 0x0.toUByte() // 0
         cpu.executeOpcode(0xF129.toShort())
@@ -206,7 +207,7 @@ internal class CpuTest {
     @Test
     fun whenJumpToSubroutineIsCalled_thenProgramCounterIsUpdated_andAddressIsStored() {
         val state = CpuState()
-        val cpu = Cpu(state, display)
+        val cpu = Cpu(state, display, input)
 
         state.setProgramCounter(0x0200.toShort())
 
@@ -222,7 +223,7 @@ internal class CpuTest {
     @Test
     fun whenReturnFromSubroutineIsCalled_thenProgramCounterIsRestored() {
         val state = CpuState()
-        val cpu = Cpu(state, display)
+        val cpu = Cpu(state, display, input)
 
         state.setProgramCounter(0x0200.toShort())
 
@@ -236,7 +237,7 @@ internal class CpuTest {
     @Test
     fun whenStoreRegistersIsCalled_thenRegistersAreStoredInMemoryAtIndex() {
         val state = CpuState()
-        val cpu = Cpu(state, display)
+        val cpu = Cpu(state, display, input)
 
         state.index = 0x0250
         state.registers[0] = 0.toUByte()
@@ -256,7 +257,7 @@ internal class CpuTest {
     @Test
     fun whenLoadRegistersIsCalled_thenMemoryIsStoredInRegisters() {
         val state = CpuState()
-        val cpu = Cpu(state, display)
+        val cpu = Cpu(state, display, input)
 
         state.index = 0x0250
         state.memory[0x0250] = 0.toUByte()
@@ -277,7 +278,7 @@ internal class CpuTest {
     @Test
     fun whenStoreBinaryCodedDecimalIsCalled_thenValueIsStored() {
         val state = CpuState()
-        val cpu = Cpu(state, display)
+        val cpu = Cpu(state, display, input)
 
         state.index = 0x0250
         state.registers[1] = 0xFF.toUByte()
@@ -291,7 +292,7 @@ internal class CpuTest {
     @Test
     fun whenStoreOrValueInRegister_thenOrValueIsStored() {
         val state = CpuState()
-        val cpu = Cpu(state, display)
+        val cpu = Cpu(state, display, input)
 
         state.registers[1] = 0xFE.toUByte()
         state.registers[2] = 0x0E.toUByte()
@@ -304,7 +305,7 @@ internal class CpuTest {
     @Test
     fun whenStoreAndValueInRegister_thenAndValueIsStored() {
         val state = CpuState()
-        val cpu = Cpu(state, display)
+        val cpu = Cpu(state, display, input)
 
         state.registers[1] = 0xA2.toUByte()
         state.registers[2] = 0xFF.toUByte()
@@ -317,7 +318,7 @@ internal class CpuTest {
     @Test
     fun whenStoreXORValueInRegister_thenXORValueIsStored() {
         val state = CpuState()
-        val cpu = Cpu(state, display)
+        val cpu = Cpu(state, display, input)
 
         state.registers[1] = 0xFE.toUByte()
         state.registers[2] = 0x0E.toUByte()
@@ -330,7 +331,7 @@ internal class CpuTest {
     @Test
     fun whenStoreADDValueInRegister_thenADDValueIsStored() {
         val state = CpuState()
-        val cpu = Cpu(state, display)
+        val cpu = Cpu(state, display, input)
 
         state.registers[1] = 0x01.toUByte()
         state.registers[2] = 0x01.toUByte()
@@ -344,7 +345,7 @@ internal class CpuTest {
     @Test
     fun whenStoreADDValueInRegisterAndValueOverflows_thenADDValueIsStoredAndFlagIsSet() {
         val state = CpuState()
-        val cpu = Cpu(state, display)
+        val cpu = Cpu(state, display, input)
 
         state.registers[1] = 0xFF.toUByte()
         state.registers[2] = 0x01.toUByte()
@@ -358,7 +359,7 @@ internal class CpuTest {
     @Test
     fun whenStoreSubtractValueInRegisterAndValueOverflows_thenSubtractValueIsStoredAndFlagIsSet() {
         val state = CpuState()
-        val cpu = Cpu(state, display)
+        val cpu = Cpu(state, display, input)
 
         state.registers[1] = 0xFF.toUByte()
         state.registers[2] = 0x01.toUByte()
@@ -372,7 +373,7 @@ internal class CpuTest {
     @Test
     fun whenShiftRegisterLeft_thenRegisterIsShiftedLeft() {
         val state = CpuState()
-        val cpu = Cpu(state, display)
+        val cpu = Cpu(state, display, input)
 
         state.registers[1] = 0x01.toUByte()
 
@@ -385,7 +386,7 @@ internal class CpuTest {
     @Test
     fun whenShiftRegisterRight_thenRegisterIsShiftedRight() {
         val state = CpuState()
-        val cpu = Cpu(state, display)
+        val cpu = Cpu(state, display, input)
 
         state.registers[1] = 0x02.toUByte()
 
@@ -398,7 +399,7 @@ internal class CpuTest {
     @Test
     fun whenStoreDelayTimerIsCalled_thenDelayTimerIsStoredInRegister() {
         val state = CpuState()
-        val cpu = Cpu(state, display)
+        val cpu = Cpu(state, display, input)
 
         state.delayTimer = 0x55.toUByte()
         cpu.executeOpcode(0xF107.toShort())
@@ -410,12 +411,38 @@ internal class CpuTest {
     fun whenGenerateRandomNumberIsCalled_thenRandomNumberIsStored() {
         val state = CpuState()
         val random = TestRandom(0x7)
-        val cpu = Cpu(state, display, random)
+        val cpu = Cpu(state, display, input, random)
 
         cpu.executeOpcode(0xC112.toShort())
 
         assertEquals(0x12, random.passedMaxValue)
         assertEquals(0x7.toUByte(), state.registers[1])
+    }
+
+    @Test
+    fun whenIsKeyPressedIsCalled_andKeyIsPressed_thenNextInstructionIsSkipped() {
+        val state = CpuState()
+        val cpu = Cpu(state, display, input)
+
+        input.setKeyPressed(keyIndex = 0xA, isPressed = true)
+        state.registers[0x1] = 0xA.toUByte()
+
+        cpu.executeOpcode(0xE19E.toShort())
+
+        assertEquals(2.toShort(), state.programCounter)
+    }
+
+    @Test
+    fun whenIsKeyPressedIsCalled_andKeyIsNotPressed_thenNextInstructionIsNotSkipped() {
+        val state = CpuState()
+        val cpu = Cpu(state, display, input)
+
+        input.setKeyPressed(keyIndex = 0xA, isPressed = false)
+        state.registers[0x1] = 0xA.toUByte()
+
+        cpu.executeOpcode(0xE19E.toShort())
+
+        assertEquals(0.toShort(), state.programCounter)
     }
 }
 

@@ -15,6 +15,7 @@ import androidx.compose.ui.window.application
 import androidx.compose.ui.window.singleWindowApplication
 import com.kiliansteenman.kemulation.chip8.Cpu
 import com.kiliansteenman.kemulation.chip8.Display
+import com.kiliansteenman.kemulation.chip8.Input
 import kotlinx.coroutines.delay
 import java.io.File
 import kotlin.time.Duration.Companion.seconds
@@ -24,7 +25,7 @@ fun main() = singleWindowApplication(
     state = WindowState(size = DpSize(640.dp, 320.dp)),
 ) {
     val display = Display(64, 32)
-    val cpu = Cpu(display = display)
+    val cpu = Cpu(display = display, input = Input())
     cpu.loadProgram(loadRom("/Users/kilian/_workspace/games/AGBE/CHIP-8/pong.ch8"))
 
     var ticks by remember { mutableStateOf(0) }
