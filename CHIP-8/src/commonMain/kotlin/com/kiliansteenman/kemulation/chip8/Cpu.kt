@@ -23,6 +23,11 @@ class CpuState {
     fun setProgramCounter(pc: Short) {
         _programCounter = pc
     }
+
+    fun decrementProgramCounter() {
+        _programCounter--
+        _programCounter--
+    }
 }
 
 class Cpu(
@@ -184,6 +189,15 @@ class Cpu(
             opcode.and(0xF0FF.toShort()) == 0xF007.toShort() -> {
                 val register = opcode.and(0x0F00).toInt().shr(8)
                 state.registers[register] = state.delayTimer
+            }
+            opcode.and(0xF0FF.toShort()) == 0xF00A.toShort() -> {
+                val register = opcode.and(0x0F00).toInt().shr(8)
+                val (isPressed, key) = input.getPressedKey()
+                if(isPressed) {
+                    state.registers[register] = key
+                } else {
+                    state.decrementProgramCounter()
+                }
             }
             opcode.and(0xF0FF.toShort()) == 0xF015.toShort() -> {
                 val register = opcode.and(0x0F00).toInt().shr(8)

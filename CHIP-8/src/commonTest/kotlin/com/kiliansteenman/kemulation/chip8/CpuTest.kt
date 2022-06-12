@@ -495,6 +495,30 @@ internal class CpuTest {
 
         assertEquals(0x03, state.index)
     }
+
+    @Test
+    fun whenWaitForKeyPressIsCalled_andNoKeyIsPressed_thenProgramCounterIsDecremented() {
+        val state = CpuState()
+        val cpu = Cpu(state, display, input)
+
+        state.setProgramCounter(0x2)
+        cpu.executeOpcode(0xF10A.toShort())
+
+        assertEquals(0x0.toUByte(), state.registers[0x1], "Register is not set")
+        assertEquals(0x0, state.programCounter)
+    }
+
+    @Test
+    fun whenWaitForKeyPressIsCalled_andKeyIsPressed_thenKeyIsStoredInRegister() {
+        val state = CpuState()
+        val cpu = Cpu(state, display, input)
+
+        input.setKeyPressed(0xE, true)
+
+        cpu.executeOpcode(0xF10A.toShort())
+
+        assertEquals(0xE.toUByte(), state.registers[0x1])
+    }
 }
 
 private class TestRandom(
