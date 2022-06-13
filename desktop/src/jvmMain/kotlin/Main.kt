@@ -56,10 +56,10 @@ private fun processKeyEvent(keyEvent: KeyEvent, input: Input): Boolean {
 }
 
 private val keyMap = mapOf(
-    Key.Button1 to 0x1,
-    Key.Button2 to 0x2,
-    Key.Button3 to 0x3,
-    Key.Button4 to 0xC,
+    Key.One to 0x1,
+    Key.Two to 0x2,
+    Key.Three to 0x3,
+    Key.Four to 0xC,
     Key.Q to 0x4,
     Key.W to 0x5,
     Key.E to 0x6,

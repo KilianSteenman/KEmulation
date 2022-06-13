@@ -40,15 +40,20 @@ class Display(
             y++
             x = xOffset.toInt() % width
         }
-        return isPixelTurnedOff
+        return isPixelTurnedOff.also {
+            if(isPixelTurnedOff) {
+                println("Returning turned off pixel")
+            }
+        }
     }
 
     private fun writePixel(x: Int, y: Int, enabled: Boolean): Boolean {
         if (x >= width || y >= height) return false
 
         val pixel = (y * width) + x
-        val wasPixelTurnedOn = pixels[pixel]
+
+        val isPixelToggled = pixels[pixel].and(enabled)
         pixels[pixel] = pixels[pixel].xor(enabled)
-        return wasPixelTurnedOn
+        return isPixelToggled
     }
 }
