@@ -59,4 +59,24 @@ internal class DisplayTest {
         assertFalse { display.pixels[62] }
         assertTrue { display.pixels[63] }
     }
+
+    @Test
+    fun whenAnEnabledPixelIsTurnedOff_thenTrueIsReturned() {
+        val display = Display(64, 32)
+
+        display.pixels[0] = true
+        val isPixelTurnedOff = display.drawSprite(0.toUByte(), 0.toUByte(), ubyteArrayOf(0x1.toUByte()))
+
+        assertFalse(display.pixels[0])
+        assertTrue(isPixelTurnedOff)
+    }
+
+    @Test
+    fun whenNoPixelsAreDisabled_thenFalseIsReturned() {
+        val display = Display(64, 32)
+
+        val isPixelTurnedOff = display.drawSprite(0.toUByte(), 0.toUByte(), ubyteArrayOf(0x1.toUByte()))
+
+        assertFalse(isPixelTurnedOff)
+    }
 }

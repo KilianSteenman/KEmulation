@@ -357,7 +357,7 @@ internal class CpuTest {
     }
 
     @Test
-    fun whenStoreSubtractValueInRegisterAndValueOverflows_thenSubtractValueIsStoredAndFlagIsSet() {
+    fun whenStoreSubtractValueInRegisterAndValueOverflows_thenSubtractValueIsStored() {
         val state = CpuState()
         val cpu = Cpu(state, display, input)
 
@@ -368,6 +368,20 @@ internal class CpuTest {
 
         assertEquals(0xFE.toUByte(), state.registers[1])
         assertEquals(0x00.toUByte(), state.registers[0xF])
+    }
+
+    @Test
+    fun whenSubtractOverflows_thenOverflowRegisterIsSet() {
+        val state = CpuState()
+        val cpu = Cpu(state, display, input)
+
+        state.registers[1] = 0x00.toUByte()
+        state.registers[2] = 0x01.toUByte()
+
+        cpu.executeOpcode(0x8125.toShort())
+
+        assertEquals(0xFF.toUByte(), state.registers[1])
+        assertEquals(0x01.toUByte(), state.registers[0xF])
     }
 
     @Test

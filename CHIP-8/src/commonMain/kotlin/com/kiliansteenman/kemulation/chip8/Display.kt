@@ -11,40 +11,44 @@ class Display(
         pixels.forEachIndexed { index, _ -> pixels[index] = false }
     }
 
-    fun drawSprite(xOffset: UByte, yOffset: UByte, sprite: UByteArray) {
+    fun drawSprite(xOffset: UByte, yOffset: UByte, sprite: UByteArray): Boolean {
         var x = xOffset.toInt() % width
         var y = yOffset.toInt() % height
 
         println("Drawing at $x ($xOffset) $y ($yOffset) : ${sprite.map { it.toString(2) }}")
 
+        var isPixelTurnedOff = false
         sprite.forEach { spriteByte ->
-            writePixel(x, y, spriteByte.and(0x80.toUByte()) == 0x80.toUByte())
+            isPixelTurnedOff = isPixelTurnedOff.or(writePixel(x, y, spriteByte.and(0x80.toUByte()) == 0x80.toUByte()))
             x++
-            writePixel(x, y, spriteByte.and(0x40.toUByte()) == 0x40.toUByte())
+            isPixelTurnedOff = isPixelTurnedOff.or(writePixel(x, y, spriteByte.and(0x40.toUByte()) == 0x40.toUByte()))
             x++
-            writePixel(x, y, spriteByte.and(0x20.toUByte()) == 0x20.toUByte())
+            isPixelTurnedOff = isPixelTurnedOff.or(writePixel(x, y, spriteByte.and(0x20.toUByte()) == 0x20.toUByte()))
             x++
-            writePixel(x, y, spriteByte.and(0x10.toUByte()) == 0x10.toUByte())
+            isPixelTurnedOff = isPixelTurnedOff.or(writePixel(x, y, spriteByte.and(0x10.toUByte()) == 0x10.toUByte()))
             x++
 
-            writePixel(x, y, spriteByte.and(0x08.toUByte()) == 0x08.toUByte())
+            isPixelTurnedOff = isPixelTurnedOff.or(writePixel(x, y, spriteByte.and(0x08.toUByte()) == 0x08.toUByte()))
             x++
-            writePixel(x, y, spriteByte.and(0x04.toUByte()) == 0x04.toUByte())
+            isPixelTurnedOff = isPixelTurnedOff.or(writePixel(x, y, spriteByte.and(0x04.toUByte()) == 0x04.toUByte()))
             x++
-            writePixel(x, y, spriteByte.and(0x02.toUByte()) == 0x02.toUByte())
+            isPixelTurnedOff = isPixelTurnedOff.or(writePixel(x, y, spriteByte.and(0x02.toUByte()) == 0x02.toUByte()))
             x++
-            writePixel(x, y, spriteByte.and(0x01.toUByte()) == 0x01.toUByte())
+            isPixelTurnedOff = isPixelTurnedOff.or(writePixel(x, y, spriteByte.and(0x01.toUByte()) == 0x01.toUByte()))
             x++
 
             y++
             x = xOffset.toInt() % width
         }
+        return isPixelTurnedOff
     }
 
-    private fun writePixel(x: Int, y: Int, enabled: Boolean) {
-        if (x >= width || y >= height) return
+    private fun writePixel(x: Int, y: Int, enabled: Boolean): Boolean {
+        if (x >= width || y >= height) return false
 
         val pixel = (y * width) + x
+        val wasPixelTurnedOn = pixels[pixel]
         pixels[pixel] = pixels[pixel].xor(enabled)
+        return wasPixelTurnedOn
     }
 }

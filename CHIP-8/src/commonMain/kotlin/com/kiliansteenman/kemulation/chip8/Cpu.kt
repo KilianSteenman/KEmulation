@@ -137,7 +137,12 @@ class Cpu(
                 val registerX = opcode.and(0x0F00).toInt().shr(8)
                 val registerY = opcode.and(0x00F0).toInt().shr(4)
                 val valueX = state.registers[registerX]
-                state.registers[registerX] = valueX.minus(state.registers[registerY]).toUByte()
+                val valueY = state.registers[registerY]
+
+                if (valueY > valueX) {
+                    state.registers[0xF] = 1.toUByte()
+                }
+                state.registers[registerX] = valueX.minus(valueY).toUByte()
             }
             opcode.and(0xF00F.toShort()) == 0x8006.toShort() -> {
                 val registerX = opcode.and(0x0F00).toInt().shr(8)
@@ -172,17 +177,17 @@ class Cpu(
                 val y = state.registers[registerY]
                 val rows = opcode.and(0x000F).toInt()
                 val sprite = state.memory.copyOfRange(state.index.toInt(), state.index.toInt() + rows)
-                display.drawSprite(x, y, sprite)
+                state.registers[0xF] = (if (display.drawSprite(x, y, sprite)) 1 else 0).toUByte()
             }
             opcode.and(0xF0FF.toShort()) == 0xE09E.toShort() -> {
                 val register = opcode.and(0x0F00).toInt().shr(8)
-                if(input.isKeyPressed(state.registers[register])) {
+                if (input.isKeyPressed(state.registers[register])) {
                     state.increaseProgramCounter()
                 }
             }
             opcode.and(0xF0FF.toShort()) == 0xE0A1.toShort() -> {
                 val register = opcode.and(0x0F00).toInt().shr(8)
-                if(!input.isKeyPressed(state.registers[register])) {
+                if (!input.isKeyPressed(state.registers[register])) {
                     state.increaseProgramCounter()
                 }
             }
@@ -193,7 +198,7 @@ class Cpu(
             opcode.and(0xF0FF.toShort()) == 0xF00A.toShort() -> {
                 val register = opcode.and(0x0F00).toInt().shr(8)
                 val (isPressed, key) = input.getPressedKey()
-                if(isPressed) {
+                if (isPressed) {
                     state.registers[register] = key
                 } else {
                     state.decrementProgramCounter()
@@ -230,7 +235,7 @@ class Cpu(
             }
             opcode.and(0xF0FF.toShort()) == 0xF065.toShort() -> {
                 val registerIndex = opcode.and(0x0F00).toInt().shr(8)
-                for (i in 0 until registerIndex) {
+                for (i in 0..registerIndex) {
                     state.registers[i] = state.memory[state.index + i]
                 }
             }
