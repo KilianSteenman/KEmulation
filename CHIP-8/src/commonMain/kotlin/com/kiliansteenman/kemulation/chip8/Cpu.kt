@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalUnsignedTypes::class)
+
 package com.kiliansteenman.kemulation.chip8
 
 import kotlin.experimental.and
@@ -57,9 +59,14 @@ class Cpu(
 
     private fun getOpcode(): Short {
         val pc = state.programCounter.toInt()
-        return state.memory[pc].toUInt().shl(8)
-            .or(state.memory[pc + 1].toUInt()).toShort()
+        return state.memory[pc].toUInt().shl(8).or(state.memory[pc + 1].toUInt()).toShort()
     }
+
+    private val Short.registerX: Int
+        get() = this.and(0x0F00).toInt().shr(8)
+
+    private val Short.registerY: Int
+        get() = this.and(0x00F0).toInt().shr(4)
 
     fun executeOpcode(opcode: Short) {
         when {
@@ -118,7 +125,7 @@ class Cpu(
     }
 
     private fun opcode3XXX(opcode: Short) {
-        val register = opcode.and(0x0F00).toInt().shr(8)
+        val register = opcode.registerX
         val value = opcode.and(0x00FF).toUByte()
         if (state.registers[register] == value) {
             state.increaseProgramCounter()
@@ -126,7 +133,7 @@ class Cpu(
     }
 
     private fun opcode4XXX(opcode: Short) {
-        val register = opcode.and(0x0F00).toInt().shr(8)
+        val register = opcode.registerX
         val value = opcode.and(0x00FF).toUByte()
         if (state.registers[register] != value) {
             state.increaseProgramCounter()
@@ -134,15 +141,15 @@ class Cpu(
     }
 
     private fun opcode5XXX(opcode: Short) {
-        val registerX = opcode.and(0x0F00).toInt().shr(8)
-        val registerY = opcode.and(0x00F0).toInt().shr(4)
+        val registerX = opcode.registerX
+        val registerY = opcode.registerY
         if (state.registers[registerX] == state.registers[registerY]) {
             state.increaseProgramCounter()
         }
     }
 
     private fun opcode6XXX(opcode: Short) {
-        val register = opcode.and(0x0F00).toInt().shr(8)
+        val register = opcode.registerX
         val value = opcode.and(0x00FF).toUByte()
         state.registers[register] = value
     }
@@ -154,46 +161,48 @@ class Cpu(
     }
 
     private fun opcode8XXX(opcode: Short) {
-        val registerX = opcode.and(0x0F00).toInt().shr(8)
-        val registerY = opcode.and(0x00F0).toInt().shr(4)
+        val registerX = opcode.registerX
+        val registerY = opcode.registerY
         state.registers[registerX] = state.registers[registerY]
     }
 
     private fun opcode8XX1(opcode: Short) {
-        val registerX = opcode.and(0x0F00).toInt().shr(8)
-        val registerY = opcode.and(0x00F0).toInt().shr(4)
+        val registerX = opcode.registerX
+        val registerY = opcode.registerY
         state.registers[registerX] = state.registers[registerX].or(state.registers[registerY])
     }
 
     private fun opcode8XX2(opcode: Short) {
-        val registerX = opcode.and(0x0F00).toInt().shr(8)
-        val registerY = opcode.and(0x00F0).toInt().shr(4)
+        val registerX = opcode.registerX
+        val registerY = opcode.registerY
         state.registers[registerX] = state.registers[registerX].and(state.registers[registerY])
     }
 
     private fun opcode8XX3(opcode: Short) {
-        val registerX = opcode.and(0x0F00).toInt().shr(8)
-        val registerY = opcode.and(0x00F0).toInt().shr(4)
+        val registerX = opcode.registerX
+        val registerY = opcode.registerY
         state.registers[registerX] = state.registers[registerX].xor(state.registers[registerY])
     }
 
     private fun opcode8XX4(opcode: Short) {
-        val registerX = opcode.and(0x0F00).toInt().shr(8)
-        val registerY = opcode.and(0x00F0).toInt().shr(4)
+        state.registers[0xF] = 0.toUByte()
+        
+        val registerX = opcode.registerX
+        val registerY = opcode.registerY
         val valueX = state.registers[registerX]
         state.registers[registerX] = valueX.plus(state.registers[registerY]).toUByte()
         state.registers[0xF] = if (state.registers[registerX] < valueX) 0x1.toUByte() else 0x0.toUByte()
     }
 
     private fun opcode8XX6(opcode: Short) {
-        val registerX = opcode.and(0x0F00).toInt().shr(8)
+        val registerX = opcode.registerX
         val valueX = state.registers[registerX]
         state.registers[registerX] = valueX.toUInt().shr(1).toUByte()
     }
 
     private fun opcode8XX7(opcode: Short) {
-        val registerX = opcode.and(0x0F00).toInt().shr(8)
-        val registerY = opcode.and(0x00F0).toInt().shr(4)
+        val registerX = opcode.registerX
+        val registerY = opcode.registerY
         val valueX = state.registers[registerX]
         val valueY = state.registers[registerY]
 
@@ -204,8 +213,8 @@ class Cpu(
     }
 
     private fun opcode8XX5(opcode: Short) {
-        val registerX = opcode.and(0x0F00).toInt().shr(8)
-        val registerY = opcode.and(0x00F0).toInt().shr(4)
+        val registerX = opcode.registerX
+        val registerY = opcode.registerY
         val valueX = state.registers[registerX]
         val valueY = state.registers[registerY]
 
@@ -216,14 +225,14 @@ class Cpu(
     }
 
     private fun opcode8XXE(opcode: Short) {
-        val registerX = opcode.and(0x0F00).toInt().shr(8)
+        val registerX = opcode.registerX
         val valueX = state.registers[registerX]
         state.registers[registerX] = valueX.toUInt().shl(1).toUByte()
     }
 
     private fun opcode9XXX(opcode: Short) {
-        val registerX = opcode.and(0x0F00).toInt().shr(8)
-        val registerY = opcode.and(0x00F0).toInt().shr(4)
+        val registerX = opcode.registerX
+        val registerY = opcode.registerY
         if (state.registers[registerX] != state.registers[registerY]) {
             state.increaseProgramCounter()
         }
@@ -234,15 +243,15 @@ class Cpu(
     }
 
     private fun opcodeCXXX(opcode: Short) {
-        val registerX = opcode.and(0x0F00).toInt().shr(8)
+        val registerX = opcode.registerX
         val maxValue = opcode.and(0x00FF).toUByte()
         state.registers[registerX] = rng.nextInt(maxValue.toInt()).toUByte()
     }
 
     private fun opcodeDXXX(opcode: Short) {
         state.registers[0xF] = 0.toUByte()
-        val registerX = opcode.and(0x0F00).toInt().shr(8)
-        val registerY = opcode.and(0x00F0).toInt().shr(4)
+        val registerX = opcode.registerX
+        val registerY = opcode.registerY
         println("Register $registerX $registerY ${state.registers.map { it.toString(16) }}")
         val x = state.registers[registerX]
         val y = state.registers[registerY]
@@ -252,26 +261,26 @@ class Cpu(
     }
 
     private fun opcodeEX9E(opcode: Short) {
-        val register = opcode.and(0x0F00).toInt().shr(8)
+        val register = opcode.registerX
         if (input.isKeyPressed(state.registers[register])) {
             state.increaseProgramCounter()
         }
     }
 
     private fun opcodeEXA1(opcode: Short) {
-        val register = opcode.and(0x0F00).toInt().shr(8)
+        val register = opcode.registerX
         if (!input.isKeyPressed(state.registers[register])) {
             state.increaseProgramCounter()
         }
     }
 
     private fun opcodeFXX7(opcode: Short) {
-        val register = opcode.and(0x0F00).toInt().shr(8)
+        val register = opcode.registerX
         state.registers[register] = state.delayTimer
     }
 
     private fun opcodeFXXA(opcode: Short) {
-        val register = opcode.and(0x0F00).toInt().shr(8)
+        val register = opcode.registerX
         val (isPressed, key) = input.getPressedKey()
         if (isPressed) {
             state.registers[register] = key
@@ -281,27 +290,27 @@ class Cpu(
     }
 
     private fun opcodeFX18(opcode: Short) {
-        val register = opcode.and(0x0F00).toInt().shr(8)
+        val register = opcode.registerX
         state.soundTimer = state.registers[register]
     }
 
     private fun opcodeFX15(opcode: Short) {
-        val register = opcode.and(0x0F00).toInt().shr(8)
+        val register = opcode.registerX
         state.delayTimer = state.registers[register]
     }
 
     private fun opcodeFX1E(opcode: Short) {
-        val register = opcode.and(0x0F00).toInt().shr(8)
+        val register = opcode.registerX
         state.index = (state.index + state.registers[register].toShort()).toShort()
     }
 
     private fun opcodeFX29(opcode: Short) {
-        val register = opcode.and(0x0F00).toInt().shr(8)
+        val register = opcode.registerX
         state.index = (FONT_OFFSET + (state.registers[register] * 5.toUInt())).toShort()
     }
 
     private fun opcodeFX33(opcode: Short) {
-        val register = opcode.and(0x0F00).toInt().shr(8)
+        val register = opcode.registerX
         val value = state.registers[register].toInt()
         state.memory[state.index.toInt()] = (value / 100).toUByte()
         state.memory[state.index.toInt() + 1] = (value / 10 % 10).toUByte()
@@ -310,14 +319,14 @@ class Cpu(
 
 
     private fun opcodeFX55(opcode: Short) {
-        val registerIndex = opcode.and(0x0F00).toInt().shr(8)
+        val registerIndex = opcode.registerX
         for (i in 0..registerIndex) {
             state.memory[state.index + i] = state.registers[i]
         }
     }
 
     private fun opcodeFX65(opcode: Short) {
-        val registerIndex = opcode.and(0x0F00).toInt().shr(8)
+        val registerIndex = opcode.registerX
         for (i in 0..registerIndex) {
             state.registers[i] = state.memory[state.index + i]
         }

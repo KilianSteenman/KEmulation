@@ -28,7 +28,7 @@ fun main() {
     ) {
         val display = Display(64, 32)
         val cpu = Cpu(display = display, input = input)
-        cpu.loadProgram(loadRom("/Users/kilian/_workspace/games/AGBE/CHIP-8/pong.ch8"))
+        cpu.loadProgram(loadRom("/Users/kilian/_workspace/games/AGBE/CHIP-8/c8_test.ch8"))
 
         var ticks by remember { mutableStateOf(0) }
         var pixels by remember { mutableStateOf(emptyList<Offset>()) }
