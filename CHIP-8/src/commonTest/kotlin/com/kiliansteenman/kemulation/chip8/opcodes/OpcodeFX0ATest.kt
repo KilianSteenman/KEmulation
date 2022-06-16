@@ -16,7 +16,7 @@ internal class OpcodeFX0ATest : OpcodeTest() {
 
     @Test
     fun whenWaitForKeyPressIsCalled_andKeyIsPressed_thenKeyIsStoredInRegister() {
-        input.setKeyPressed(0xE, true)
+        inputState.setKeyPressed(0xE, true)
 
         cpu.executeOpcode(0xF10A.toShort())
 

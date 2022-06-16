@@ -35,7 +35,7 @@ class CpuState {
 class Cpu(
     private val state: CpuState = CpuState(),
     private val display: Display,
-    private val input: Input,
+    private val inputState: InputState,
     private val rng: Random = Random.Default
 ) {
 
@@ -276,14 +276,14 @@ class Cpu(
 
     private fun opcodeEX9E(opcode: Short) {
         val register = opcode.registerX
-        if (input.isKeyPressed(state.registers[register])) {
+        if (inputState.isKeyPressed(state.registers[register])) {
             state.increaseProgramCounter()
         }
     }
 
     private fun opcodeEXA1(opcode: Short) {
         val register = opcode.registerX
-        if (!input.isKeyPressed(state.registers[register])) {
+        if (!inputState.isKeyPressed(state.registers[register])) {
             state.increaseProgramCounter()
         }
     }
@@ -295,7 +295,7 @@ class Cpu(
 
     private fun opcodeFXXA(opcode: Short) {
         val register = opcode.registerX
-        val (isPressed, key) = input.getPressedKey()
+        val (isPressed, key) = inputState.getPressedKey()
         if (isPressed) {
             state.registers[register] = key
         } else {

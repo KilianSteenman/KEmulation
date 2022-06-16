@@ -7,7 +7,7 @@ internal class OpcodeEX9ETest : OpcodeTest() {
 
     @Test
     fun whenIsKeyPressedIsCalled_andKeyIsPressed_thenNextInstructionIsSkipped() {
-        input.setKeyPressed(keyIndex = 0xA, isPressed = true)
+        inputState.setKeyPressed(keyIndex = 0xA, isPressed = true)
         state.registers[0x1] = 0xA.toUByte()
 
         cpu.executeOpcode(0xE19E.toShort())
@@ -17,7 +17,7 @@ internal class OpcodeEX9ETest : OpcodeTest() {
 
     @Test
     fun whenIsKeyPressedIsCalled_andKeyIsNotPressed_thenNextInstructionIsNotSkipped() {
-        input.setKeyPressed(keyIndex = 0xA, isPressed = false)
+        inputState.setKeyPressed(keyIndex = 0xA, isPressed = false)
         state.registers[0x1] = 0xA.toUByte()
 
         cpu.executeOpcode(0xE19E.toShort())

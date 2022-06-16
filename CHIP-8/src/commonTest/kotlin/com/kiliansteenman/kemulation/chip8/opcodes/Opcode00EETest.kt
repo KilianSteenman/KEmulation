@@ -11,7 +11,7 @@ internal class Opcode00EETest : OpcodeTest() {
     @Test
     fun whenReturnFromSubroutineIsCalled_thenProgramCounterIsRestored() {
         val state = CpuState()
-        val cpu = Cpu(state, display, input)
+        val cpu = Cpu(state, display, inputState)
 
         state.setProgramCounter(0x0200.toShort())
 

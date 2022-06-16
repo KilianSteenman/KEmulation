@@ -6,12 +6,12 @@ import kotlin.test.assertEquals
 internal class CpuTest {
 
     private val display = Display(1, 1)
-    private val input = Input()
+    private val inputState = InputState()
 
     @Test
     fun whenCpuIsCreated_thenFontIsCopiedInMemory() {
         val state = CpuState()
-        Cpu(state, display, input)
+        Cpu(state, display, inputState)
 
         // Checking the first and last part is fine for now
         assertEquals(0xF0.toUByte(), state.memory[0x050])
