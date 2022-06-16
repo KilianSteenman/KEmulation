@@ -186,7 +186,7 @@ class Cpu(
 
     private fun opcode8XX4(opcode: Short) {
         state.registers[0xF] = 0.toUByte()
-        
+
         val registerX = opcode.registerX
         val registerY = opcode.registerY
         val valueX = state.registers[registerX]
@@ -249,15 +249,29 @@ class Cpu(
     }
 
     private fun opcodeDXXX(opcode: Short) {
+        val rowCount = opcode.and(0x000F).toInt()
+
         state.registers[0xF] = 0.toUByte()
-        val registerX = opcode.registerX
-        val registerY = opcode.registerY
-        println("Register $registerX $registerY ${state.registers.map { it.toString(16) }}")
-        val x = state.registers[registerX]
-        val y = state.registers[registerY]
-        val rows = opcode.and(0x000F).toInt()
-        val sprite = state.memory.copyOfRange(state.index.toInt(), state.index.toInt() + rows)
-        state.registers[0xF] = (if (display.drawSprite(x, y, sprite)) 1 else 0).toUByte()
+
+        val xOffset = state.registers[opcode.registerX].toInt()
+        val yOffset = state.registers[opcode.registerY].toInt()
+        for (row in 0 until rowCount) {
+            val y = (yOffset + row) % display.height
+            var sprite = state.memory[state.index + row]
+
+            for (column in 0 until 8) {
+                if (sprite.and(0x80.toUByte()) != 0.toUByte()) {
+                    val x = (xOffset + column) % display.width
+                    val pixelIndex = y * display.width + x
+                    if (display.pixels[pixelIndex]) {
+                        state.registers[0xF] = 1.toUByte()
+                    }
+
+                    display.pixels[pixelIndex] = display.pixels[pixelIndex].xor(true)
+                }
+                sprite = sprite.toUInt().shl(1).toUByte()
+            }
+        }
     }
 
     private fun opcodeEX9E(opcode: Short) {
