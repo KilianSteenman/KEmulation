@@ -110,3 +110,8 @@ gradle-app.setting
 
 # Cache of project
 .gradletasknamecache
+
+# Roms
+*.ch8
+*.rom
+*.c8

@@ -1,4 +1,5 @@
-# KEmulation
+# KEmulator
+
 Emulators written in Kotlin multiplatform
 
 Current emulators:

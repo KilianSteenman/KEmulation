@@ -1,6 +1,5 @@
 import org.jetbrains.compose.compose
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("multiplatform")
@@ -21,8 +20,8 @@ kotlin {
     sourceSets {
         val jvmMain by getting {
             dependencies {
-                implementation(project(":CHIP-8"))
-                implementation(project(":common"))
+                implementation(project(":emulators:chip-8"))
+                implementation(project(":apps:common"))
                 implementation(compose.desktop.currentOs)
             }
         }

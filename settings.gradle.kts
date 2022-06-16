@@ -1,5 +1,3 @@
-rootProject.name = "KEmulator"
-
 pluginManagement {
     repositories {
         google()
@@ -17,10 +15,11 @@ pluginManagement {
     }
 }
 
+rootProject.name = "KEmulator"
 include(
-    "AGBE-CPU",
-    "CHIP-8",
-    "android",
-    "common",
-    "desktop"
+    "emulators:gameboy",
+    "emulators:chip-8",
+    "apps:android",
+    "apps:common",
+    "apps:desktop"
 )
