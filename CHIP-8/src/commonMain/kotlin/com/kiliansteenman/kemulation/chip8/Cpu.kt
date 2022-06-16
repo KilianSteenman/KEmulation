@@ -201,6 +201,7 @@ class Cpu(
     private fun opcode8XX6(opcode: Short) {
         val registerX = opcode.registerX
         val valueX = state.registers[registerX]
+        state.registers[0xF] = valueX.and(0x1.toUByte())
         state.registers[registerX] = valueX.toUInt().shr(1).toUByte()
     }
 
