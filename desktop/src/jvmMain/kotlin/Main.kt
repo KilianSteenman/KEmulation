@@ -1,16 +1,17 @@
-@file:OptIn(ExperimentalTime::class, ExperimentalComposeUiApi::class)
+@file:OptIn(ExperimentalTime::class)
 
 import androidx.compose.runtime.*
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.WindowState
 import androidx.compose.ui.window.singleWindowApplication
 import com.kiliansteenman.kemulation.chip8.Cpu
+import com.kiliansteenman.kemulation.chip8.CpuState
 import com.kiliansteenman.kemulation.chip8.Display
 import com.kiliansteenman.kemulation.chip8.InputState
 import kotlinx.coroutines.delay
+import java.awt.Toolkit
 import java.io.File
 import kotlin.system.exitProcess
 import kotlin.time.ExperimentalTime
@@ -24,19 +25,26 @@ fun main(args: Array<String>) {
         state = WindowState(size = DpSize(640.dp, 320.dp)),
         onKeyEvent = { keyEvent -> keyboardInput.processKeyEvent(keyEvent) }
     ) {
+        val cpuState = CpuState()
         val display = Display(64, 32)
-        val cpu = Cpu(display = display, inputState = inputState)
+        val cpu = Cpu(state = cpuState, display = display, inputState = inputState)
         cpu.loadProgram(loadRom(romPath))
 
         var ticks by remember { mutableStateOf(0) }
         var pixels by remember { mutableStateOf(emptyList<Offset>()) }
+        var playAudio by remember { mutableStateOf(false) }
         LaunchedEffect(Unit) {
             while (true) {
                 delay(((1f / 60) * 100).toLong())
                 cpu.executeProgram()
                 pixels = display.enabledPixels
+                playAudio = cpuState.soundTimer > 0.toUByte()
                 ticks++
             }
+        }
+
+        if (playAudio) {
+            Toolkit.getDefaultToolkit().beep()
         }
 
         MonochromeDisplay(pixels = pixels)

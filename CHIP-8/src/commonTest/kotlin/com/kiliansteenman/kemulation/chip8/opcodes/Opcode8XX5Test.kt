@@ -13,7 +13,7 @@ internal class Opcode8XX5Test : OpcodeTest() {
         cpu.executeOpcode(0x8125.toShort())
 
         assertEquals(0xFE.toUByte(), state.registers[1])
-        assertEquals(0x00.toUByte(), state.registers[0xF])
+        assertEquals(0x01.toUByte(), state.registers[0xF])
     }
 
     @Test
@@ -24,6 +24,6 @@ internal class Opcode8XX5Test : OpcodeTest() {
         cpu.executeOpcode(0x8125.toShort())
 
         assertEquals(0xFF.toUByte(), state.registers[1])
-        assertEquals(0x01.toUByte(), state.registers[0xF])
+        assertEquals(0x00.toUByte(), state.registers[0xF])
     }
 }

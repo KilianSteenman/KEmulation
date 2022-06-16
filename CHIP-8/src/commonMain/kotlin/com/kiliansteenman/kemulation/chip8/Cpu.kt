@@ -53,8 +53,12 @@ class Cpu(
         val opcode = getOpcode()
         state.increaseProgramCounter()
         executeOpcode(opcode)
-        state.delayTimer--
-        state.soundTimer--
+        if (state.delayTimer > 0.toUByte()) {
+            state.delayTimer--
+        }
+        if (state.soundTimer > 0.toUByte()) {
+            state.soundTimer--
+        }
     }
 
     private fun getOpcode(): Short {
@@ -201,27 +205,19 @@ class Cpu(
     }
 
     private fun opcode8XX7(opcode: Short) {
-        val registerX = opcode.registerX
-        val registerY = opcode.registerY
-        val valueX = state.registers[registerX]
-        val valueY = state.registers[registerY]
+        val valueX = state.registers[opcode.registerX]
+        val valueY = state.registers[opcode.registerY]
 
-        if (valueY > valueX) {
-            state.registers[0xF] = 1.toUByte()
-        }
-        state.registers[registerX] = valueX.minus(valueY).toUByte()
+        state.registers[opcode.registerX] = (valueX - valueY).toUByte()
+        state.registers[0xF] = if (valueX > valueY) 1.toUByte() else 0.toUByte()
     }
 
     private fun opcode8XX5(opcode: Short) {
-        val registerX = opcode.registerX
-        val registerY = opcode.registerY
-        val valueX = state.registers[registerX]
-        val valueY = state.registers[registerY]
+        val valueX = state.registers[opcode.registerX]
+        val valueY = state.registers[opcode.registerY]
 
-        if (valueY > valueX) {
-            state.registers[0xF] = 1.toUByte()
-        }
-        state.registers[registerX] = valueX.minus(valueY).toUByte()
+        state.registers[opcode.registerX] = (valueX - valueY).toUByte()
+        state.registers[0xF] = if (valueX > valueY) 1.toUByte() else 0.toUByte()
     }
 
     private fun opcode8XXE(opcode: Short) {
