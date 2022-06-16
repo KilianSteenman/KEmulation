@@ -209,8 +209,8 @@ class Cpu(
         val valueX = state.registers[opcode.registerX]
         val valueY = state.registers[opcode.registerY]
 
-        state.registers[opcode.registerX] = (valueX - valueY).toUByte()
-        state.registers[0xF] = if (valueX > valueY) 1.toUByte() else 0.toUByte()
+        state.registers[opcode.registerX] = (valueY - valueX).toUByte()
+        state.registers[0xF] = if (valueY > valueX) 1.toUByte() else 0.toUByte()
     }
 
     private fun opcode8XX5(opcode: Short) {
