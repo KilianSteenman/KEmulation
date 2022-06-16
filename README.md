@@ -1,2 +1,6 @@
-# AGBE
-Another Game Boy Emulator
+# KEmulation
+Emulators written in Kotlin multiplatform
+
+Current emulators:
+
+- CHIP-8
