@@ -21,5 +21,6 @@ include(
     "emulators:chip-8",
     "apps:android",
     "apps:common",
-    "apps:desktop"
+    "apps:desktop",
+    "apps:web"
 )
