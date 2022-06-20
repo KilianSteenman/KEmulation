@@ -3,6 +3,8 @@
 package com.kiliansteenman.kemulator.android
 
 import MonochromeDisplay
+import android.media.AudioManager
+import android.media.ToneGenerator
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -22,6 +24,7 @@ import com.kiliansteenman.kemulation.chip8.CpuState
 import com.kiliansteenman.kemulation.chip8.Display
 import com.kiliansteenman.kemulation.chip8.InputState
 import kotlinx.coroutines.delay
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,7 +63,8 @@ private fun Chip8Screen(rom: UByteArray) {
     }
 
     if (playAudio) {
-//        Toolkit.getDefaultToolkit().beep()
+        ToneGenerator(AudioManager.STREAM_MUSIC, 100)
+            .startTone(ToneGenerator.TONE_CDMA_PIP, 150)
     }
 
     Column(
