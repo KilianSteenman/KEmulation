@@ -14,20 +14,34 @@ import org.jetbrains.compose.web.dom.Text
 import org.jetbrains.compose.web.renderComposable
 import org.khronos.webgl.ArrayBuffer
 import org.khronos.webgl.Int8Array
+import org.w3c.dom.HTMLElement
 import org.w3c.dom.HTMLInputElement
+import org.w3c.dom.events.KeyboardEvent
+import org.w3c.dom.get
 import org.w3c.files.FileReader
 import org.w3c.files.get
 import org.w3c.xhr.ProgressEvent
 
 fun main() {
-    document.getElementById("body")
+    val body = document.getElementsByTagName("body").get(0) as HTMLElement
+
+    val inputState = InputState()
+    val keyboardInput = KeyboardInput(inputState)
+    body.addEventListener("keyup", {
+        keyboardInput.processKeyboardEvent((it as KeyboardEvent), false)
+    })
+
+    body.addEventListener("keydown", {
+        keyboardInput.processKeyboardEvent((it as KeyboardEvent), true)
+    })
+
     renderComposable(rootElementId = "root") {
         var file: UByteArray? by remember { mutableStateOf(null) }
 
         if (file == null) {
             FileSelection { file = it }
         } else {
-            Chip8Player(file!!)
+            Chip8Player(file!!, inputState)
         }
     }
 }
@@ -60,9 +74,7 @@ fun ArrayBuffer.toUByteArray(): UByteArray =
     this.run { Int8Array(this).unsafeCast<ByteArray>().map { it.toUByte() }.toUByteArray() }
 
 @Composable
-fun Chip8Player(rom: UByteArray) {
-    val inputState = InputState()
-//        val keyboardInput = KeyboardInput(inputState)
+fun Chip8Player(rom: UByteArray, inputState: InputState) {
     val cpuState = CpuState()
     val display = Display(64, 32)
     val cpu = Cpu(state = cpuState, display = display, inputState = inputState)
