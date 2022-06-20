@@ -1,5 +1,6 @@
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -11,7 +12,10 @@ fun MonochromeDisplay(
     pixels: Array<Boolean>,
     pixelColor: Color = Color.Black,
 ) {
-    Canvas(modifier = Modifier.fillMaxSize()) {
+    Canvas(
+        modifier = Modifier.fillMaxWidth()
+            .fillMaxHeight(0.5f)
+    ) {
         drawPoints(points = pixels.toOffsets(), pointMode = PointMode.Points, color = pixelColor, strokeWidth = 10f)
     }
 }
