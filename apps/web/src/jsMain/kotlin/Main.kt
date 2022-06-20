@@ -80,7 +80,6 @@ fun Chip8Player(rom: UByteArray, inputState: InputState) {
     val cpu = Cpu(state = cpuState, display = display, inputState = inputState)
     cpu.loadProgram(rom)
 
-    var ticks by remember { mutableStateOf(0) }
     var pixels by remember { mutableStateOf(emptyArray<Boolean>()) }
     var playAudio by remember { mutableStateOf(false) }
     LaunchedEffect(Unit) {
@@ -89,7 +88,6 @@ fun Chip8Player(rom: UByteArray, inputState: InputState) {
             cpu.executeProgram()
             pixels = display.pixels.toTypedArray()
             playAudio = cpuState.soundTimer > 0.toUByte()
-            ticks++
         }
     }
 

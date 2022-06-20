@@ -29,7 +29,6 @@ fun main(args: Array<String>) {
         val cpu = Cpu(state = cpuState, display = display, inputState = inputState)
         cpu.loadProgram(loadRom(romPath))
 
-        var ticks by remember { mutableStateOf(0) }
         var pixels by remember { mutableStateOf(emptyArray<Boolean>()) }
         var playAudio by remember { mutableStateOf(false) }
         LaunchedEffect(Unit) {
@@ -38,7 +37,6 @@ fun main(args: Array<String>) {
                 cpu.executeProgram()
                 pixels = display.pixels.toTypedArray()
                 playAudio = cpuState.soundTimer > 0.toUByte()
-                ticks++
             }
         }
 
