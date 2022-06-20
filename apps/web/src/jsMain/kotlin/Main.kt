@@ -97,11 +97,6 @@ fun Chip8Player(rom: UByteArray, inputState: InputState) {
 //            Toolkit.getDefaultToolkit().beep()
     }
 
-    MonochromeDisplay(pixels = pixels)
-}
-
-@Composable
-fun MonochromeDisplay(pixels: Array<Boolean>) {
     Div(attrs = {
         style {
             property("font-family", "'Courier New', monospace")
@@ -109,13 +104,18 @@ fun MonochromeDisplay(pixels: Array<Boolean>) {
             property("white-space", "pre-wrap")
         }
     }) {
-        pixels.map { isEnabled -> if (isEnabled) "o" else "." }
-            .chunked(64)
-            .forEach { rowPixels ->
-                Div {
-                    Text(rowPixels.joinToString(""))
-                }
-            }
+        MonochromeDisplay(pixels = pixels)
     }
+}
+
+@Composable
+fun MonochromeDisplay(pixels: Array<Boolean>) {
+    pixels.map { isEnabled -> if (isEnabled) "o" else "." }
+        .chunked(64)
+        .forEach { rowPixels ->
+            Div {
+                Text(rowPixels.joinToString(""))
+            }
+        }
 }
 

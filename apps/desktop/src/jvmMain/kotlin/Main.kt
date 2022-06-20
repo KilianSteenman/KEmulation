@@ -1,7 +1,6 @@
 @file:OptIn(ExperimentalTime::class)
 
 import androidx.compose.runtime.*
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.WindowState
@@ -31,13 +30,13 @@ fun main(args: Array<String>) {
         cpu.loadProgram(loadRom(romPath))
 
         var ticks by remember { mutableStateOf(0) }
-        var pixels by remember { mutableStateOf(emptyList<Offset>()) }
+        var pixels by remember { mutableStateOf(emptyArray<Boolean>()) }
         var playAudio by remember { mutableStateOf(false) }
         LaunchedEffect(Unit) {
             while (true) {
                 delay(((1f / 60) * 100).toLong())
                 cpu.executeProgram()
-                pixels = display.enabledPixels
+                pixels = display.pixels.toTypedArray()
                 playAudio = cpuState.soundTimer > 0.toUByte()
                 ticks++
             }
@@ -49,17 +48,6 @@ fun main(args: Array<String>) {
 
         MonochromeDisplay(pixels = pixels)
     }
-}
-
-val Display.enabledPixels: List<Offset>
-    get() = pixels.mapIndexed { index, isEnabled ->
-        Pair(index.toOffset(), isEnabled)
-    }.filter { it.second }.map { it.first }.toList()
-
-fun Int.toOffset(): Offset {
-    val x = (this / 64) * 10 + 10
-    val y = this % 64 * 10 + 10
-    return Offset(y.toFloat(), x.toFloat())
 }
 
 fun loadRom(path: String): UByteArray {
