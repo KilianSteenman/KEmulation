@@ -9,9 +9,9 @@ import kotlinx.coroutines.launch
 
 class Chip8(
     private val input: Input,
-    private val audio: Audio
 ) {
     private val display = Display(64, 32)
+    private val audio = Audio()
     private var runJob: Job? = null
 
     private val cpu = Cpu(
@@ -34,6 +34,8 @@ class Chip8(
                 cpu.executeProgram()
 
                 _pixels.emit(display.pixels.toList())
+
+                // TODO: Play audio when audio flag is set
             }
         }
     }

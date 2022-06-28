@@ -56,10 +56,7 @@ fun ArrayBuffer.toUByteArray(): UByteArray =
 
 @Composable
 internal fun Chip8Player(rom: UByteArray, keyboardInput: KeyboardInput) {
-    val chip8 = Chip8(
-        input = keyboardInput,
-        audio = JsAudio()
-    ).apply {
+    val chip8 = Chip8(input = keyboardInput).apply {
         loadRom(rom)
         start()
     }

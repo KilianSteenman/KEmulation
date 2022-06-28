@@ -17,10 +17,7 @@ fun main(args: Array<String>) {
     val rom = if (romPath != null) loadRom(romPath) else null
 
     val keyboardInput = KeyboardInput()
-    val chip8 = Chip8(
-        input = keyboardInput,
-        audio = JvmAudio()
-    )
+    val chip8 = Chip8(input = keyboardInput)
 
     if (rom != null) {
         chip8.apply {

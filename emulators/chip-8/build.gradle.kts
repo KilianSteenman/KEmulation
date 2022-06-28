@@ -1,14 +1,16 @@
 plugins {
     kotlin("multiplatform")
+    id("com.android.library")
 }
 
 group = "com.kiliansteenman.kemulation.chip8"
-version = "0.0.1"
+version = "0.1.0"
 
 repositories {
     mavenCentral()
 }
 kotlin {
+    android()
     jvm {
         compilations.all {
             kotlinOptions.jvmTarget = "1.8"
@@ -45,6 +47,8 @@ kotlin {
                 implementation(kotlin("test-annotations-common"))
             }
         }
+        val androidMain by getting
+        val androidTest by getting
         val jvmMain by getting
         val jvmTest by getting {
             dependencies {
@@ -59,5 +63,14 @@ kotlin {
         }
         val nativeMain by getting
         val nativeTest by getting
+    }
+}
+
+android {
+    compileSdk = 31
+    sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
+    defaultConfig {
+        minSdk = 21
+        targetSdk = 31
     }
 }

@@ -1,20 +1,19 @@
-package com.kiliansteenman.kemulator.android
+package com.kiliansteenman.kemulation.chip8
 
 import android.media.AudioManager
 import android.media.ToneGenerator
-import com.kiliansteenman.kemulation.chip8.Audio
 
-class AndroidAudio : Audio() {
+actual class Audio {
 
     private var tone: ToneGenerator? = null
 
-    override fun play(beepLength: Int) {
+    actual fun play(beepLength: Int) {
         tone = ToneGenerator(AudioManager.STREAM_MUSIC, 100).apply {
             startTone(ToneGenerator.TONE_CDMA_PIP, 150)
         }
     }
 
-    override fun stop() {
+    actual fun stop() {
         tone?.stopTone()
         tone = null
     }

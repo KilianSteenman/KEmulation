@@ -31,10 +31,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 private fun Chip8Screen(rom: UByteArray) {
     val inputState = InputState()
-    val chip8 = Chip8(
-        input = OnScreenKeyboard(inputState),
-        audio = AndroidAudio()
-    ).apply {
+    val chip8 = Chip8(input = OnScreenKeyboard(inputState)).apply {
         loadRom(rom)
         start()
     }

@@ -1,8 +1,8 @@
 package com.kiliansteenman.kemulation.chip8
 
-abstract class Audio {
+expect class Audio() {
 
-    abstract fun play(beepLength: Int)
+    fun play(beepLength: Int)
 
-    abstract fun stop()
+    fun stop()
 }
