@@ -1,13 +1,27 @@
+import com.kiliansteenman.kemulation.chip8.Input
 import com.kiliansteenman.kemulation.chip8.InputState
+import org.w3c.dom.HTMLElement
 import org.w3c.dom.events.KeyboardEvent
 
-class KeyboardInput(
-    private val inputState: InputState
-) {
+internal class KeyboardInput(
+    body: HTMLElement
+) : Input() {
 
-    fun processKeyboardEvent(event: KeyboardEvent, isPressed: Boolean) {
+    override val state = InputState()
+
+    init {
+        body.addEventListener("keyup", {
+            processKeyboardEvent((it as KeyboardEvent), false)
+        })
+
+        body.addEventListener("keydown", {
+            processKeyboardEvent((it as KeyboardEvent), true)
+        })
+    }
+
+    private fun processKeyboardEvent(event: KeyboardEvent, isPressed: Boolean) {
         keyMap[event.keyCode]?.let { keyIndex ->
-            inputState.setKeyPressed(keyIndex, isPressed)
+            state.setKeyPressed(keyIndex, isPressed)
         }
     }
 

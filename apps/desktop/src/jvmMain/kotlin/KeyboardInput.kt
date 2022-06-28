@@ -1,14 +1,15 @@
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.input.key.*
+import com.kiliansteenman.kemulation.chip8.Input
 import com.kiliansteenman.kemulation.chip8.InputState
 
-class KeyboardInput(
-    private val inputState: InputState
-) {
+class KeyboardInput : Input() {
+
+    override val state: InputState = InputState()
 
     fun processKeyEvent(keyEvent: KeyEvent): Boolean {
         keyMap[keyEvent.key]?.let { keyIndex ->
-            inputState.setKeyPressed(keyIndex, keyEvent.type == KeyEventType.KeyDown)
+            state.setKeyPressed(keyIndex, keyEvent.type == KeyEventType.KeyDown)
             return true
         }
         return false

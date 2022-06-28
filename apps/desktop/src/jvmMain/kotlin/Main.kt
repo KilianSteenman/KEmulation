@@ -1,50 +1,72 @@
-@file:OptIn(ExperimentalTime::class)
+@file:OptIn(ExperimentalUnsignedTypes::class)
 
+import androidx.compose.material.Button
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
+import androidx.compose.ui.awt.ComposeWindow
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.WindowState
 import androidx.compose.ui.window.singleWindowApplication
-import com.kiliansteenman.kemulation.chip8.Cpu
-import com.kiliansteenman.kemulation.chip8.CpuState
-import com.kiliansteenman.kemulation.chip8.Display
-import com.kiliansteenman.kemulation.chip8.InputState
-import kotlinx.coroutines.delay
-import java.awt.Toolkit
+import com.kiliansteenman.kemulation.chip8.Chip8
+import java.awt.FileDialog
 import java.io.File
-import kotlin.system.exitProcess
-import kotlin.time.ExperimentalTime
 
 fun main(args: Array<String>) {
-    val romPath = args.getOrNull(0) ?: exitProcess(0)
+    val romPath = args.getOrNull(0)
+    val rom = if (romPath != null) loadRom(romPath) else null
 
-    val inputState = InputState()
-    val keyboardInput = KeyboardInput(inputState)
+    val keyboardInput = KeyboardInput()
+    val chip8 = Chip8(
+        input = keyboardInput,
+        audio = JvmAudio()
+    )
+
+    if (rom != null) {
+        chip8.apply {
+            loadRom(rom)
+            start()
+        }
+    }
+
     return singleWindowApplication(
         state = WindowState(size = DpSize(640.dp, 320.dp)),
         onKeyEvent = { keyEvent -> keyboardInput.processKeyEvent(keyEvent) }
     ) {
-        val cpuState = CpuState()
-        val display = Display(64, 32)
-        val cpu = Cpu(state = cpuState, display = display, inputState = inputState)
-        cpu.loadProgram(loadRom(romPath))
+        var file: UByteArray? by remember { mutableStateOf(rom) }
 
-        var pixels by remember { mutableStateOf(emptyArray<Boolean>()) }
-        var playAudio by remember { mutableStateOf(false) }
-        LaunchedEffect(Unit) {
-            while (true) {
-                delay(((1f / 60) * 100).toLong())
-                cpu.executeProgram()
-                pixels = display.pixels.toTypedArray()
-                playAudio = cpuState.soundTimer > 0.toUByte()
+        if (file == null) {
+            FileSelection(window) { selectedFile ->
+                file = selectedFile
+                chip8.apply {
+                    loadRom(selectedFile)
+                    start()
+                }
             }
+        } else {
+            Chip8Player(chip8)
         }
+    }
+}
 
-        if (playAudio) {
-            Toolkit.getDefaultToolkit().beep()
+@Composable
+fun FileSelection(window: ComposeWindow, onFileSelected: (UByteArray) -> Unit) {
+    Button(onClick = {
+        FileDialog(window).apply {
+            isVisible = true
+            onFileSelected(loadRom(File(directory, file).absolutePath))
         }
+    }) {
+        Text("Select rom file")
+    }
+}
 
-        MonochromeDisplay(pixels = pixels)
+@Composable
+fun Chip8Player(chip8: Chip8) {
+    val pixels = chip8.pixels.collectAsState(null)
+
+    pixels.value?.let {
+        MonochromeDisplay(pixels = it.toTypedArray())
     }
 }
 
