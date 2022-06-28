@@ -31,7 +31,7 @@ fun main(args: Array<String>) {
 
     return singleWindowApplication(
         state = WindowState(size = DpSize(640.dp, 320.dp)),
-        onKeyEvent = { keyEvent -> keyboardInput.processKeyEvent(keyEvent) }
+        onKeyEvent = keyboardInput::processKeyEvent
     ) {
         var file: UByteArray? by remember { mutableStateOf(rom) }
 
