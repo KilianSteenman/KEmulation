@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalUnsignedTypes::class)
 
-package com.kiliansteenman.kemulator.android
+package com.kiliansteenman.kemulation.android
 
 import MonochromeDisplay
 import android.os.Bundle

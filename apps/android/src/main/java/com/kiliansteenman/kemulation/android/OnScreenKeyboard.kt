@@ -1,4 +1,4 @@
-package com.kiliansteenman.kemulator.android
+package com.kiliansteenman.kemulation.android
 
 import com.kiliansteenman.kemulation.chip8.Input
 import com.kiliansteenman.kemulation.chip8.InputState
