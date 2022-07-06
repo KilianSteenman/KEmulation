@@ -3,13 +3,18 @@
 package com.kiliansteenman.kemulation.android
 
 import MonochromeDisplay
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Column
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.material.Button
+import androidx.compose.material.Text
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.platform.LocalContext
 import com.kiliansteenman.kemulation.chip8.Chip8
 import com.kiliansteenman.kemulation.chip8.InputState
 
@@ -17,25 +22,44 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val inputStream = resources.openRawResource(R.raw.breakout)
-        val rom = ByteArray(inputStream.available())
-        inputStream.read(rom)
-        inputStream.close()
+        val onScreenKeyboard = OnScreenKeyboard(InputState())
+        val chip8 = Chip8(input = onScreenKeyboard)
 
         setContent {
-            Chip8Screen(rom.map { it.toUByte() }.toUByteArray())
+            var file: UByteArray? by remember { mutableStateOf(null) }
+
+            if (file == null) {
+                RomSelectScreen(LocalContext.current) {
+                    file = it
+                    chip8.loadRom(it)
+                    chip8.start()
+                }
+            } else {
+                Chip8Screen(chip8, onScreenKeyboard)
+            }
         }
     }
 }
 
 @Composable
-private fun Chip8Screen(rom: UByteArray) {
-    val inputState = InputState()
-    val chip8 = Chip8(input = OnScreenKeyboard(inputState)).apply {
-        loadRom(rom)
-        start()
+private fun RomSelectScreen(context: Context, onRomSelected: (rom: UByteArray) -> Unit) {
+    val romSelectLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri ->
+        if (uri != null) {
+            context.contentResolver.openInputStream(uri)?.buffered()?.use {
+                onRomSelected(it.readBytes().toUByteArray())
+            }
+        }
     }
 
+    Button(onClick = { romSelectLauncher.launch("*/*") }) {
+        Text("Select Chip-8 ROM")
+    }
+}
+
+@Composable
+private fun Chip8Screen(chip8: Chip8, onScreenKeyboard: OnScreenKeyboard) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -44,6 +68,6 @@ private fun Chip8Screen(rom: UByteArray) {
         pixels.value?.let {
             MonochromeDisplay(pixels = it.toTypedArray())
         }
-        Keyboard { key, isPressed -> inputState.setKeyPressed(key, isPressed) }
+        Keyboard { key, isPressed -> onScreenKeyboard.setKeyPressed(key, isPressed) }
     }
 }
