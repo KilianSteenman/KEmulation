@@ -6,8 +6,8 @@ plugins {
     id("org.jetbrains.compose")
 }
 
-group = "com.kiliansteenman.kemulator"
-version = "1.0-SNAPSHOT"
+group = "com.kiliansteenman.kemulation"
+version = "0.1.0"
 
 
 kotlin {
@@ -34,8 +34,8 @@ compose.desktop {
         mainClass = "MainKt"
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "KEmulator"
-            packageVersion = "1.0.0"
+            packageName = "KEmulation"
+            packageVersion = "0.1.0"
         }
     }
 }

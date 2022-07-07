@@ -5,8 +5,8 @@ plugins {
     id("org.jetbrains.compose")
 }
 
-group "com.kiliansteenman.kemulator"
-version "1.0-SNAPSHOT"
+group "com.kiliansteenman.kemulation"
+version "0.1.0"
 
 repositories {
     google()
