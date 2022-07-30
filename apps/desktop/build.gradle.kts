@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "com.kiliansteenman.kemulation"
-version = "0.1.0"
+version = "1.0.0"
 
 
 kotlin {
@@ -35,7 +35,6 @@ compose.desktop {
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = "KEmulation"
-            packageVersion = "0.1.0"
         }
     }
 }
