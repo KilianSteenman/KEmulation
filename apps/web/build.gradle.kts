@@ -1,4 +1,6 @@
 import org.jetbrains.compose.compose
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootExtension
 
 plugins {
     kotlin("multiplatform")
@@ -41,4 +43,8 @@ kotlin {
             }
         }
     }
+}
+
+compose.experimental {
+    web.application {}
 }
