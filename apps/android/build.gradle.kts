@@ -14,7 +14,7 @@ repositories {
 dependencies {
     implementation(project(":apps:common"))
     implementation(project(":emulators:chip-8"))
-    implementation("androidx.appcompat:appcompat:1.6.0")
+    implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("androidx.compose.material:material:1.3.1")
     implementation("androidx.activity:activity-compose:1.6.1")
 }
