@@ -35,11 +35,6 @@ kotlin {
                 api("androidx.core:core-ktx:1.10.1")
             }
         }
-        val androidTest by getting {
-            dependencies {
-                implementation("junit:junit:4.13.2")
-            }
-        }
         val desktopMain by getting {
             dependencies {
                 api(compose.preview)
@@ -50,14 +45,17 @@ kotlin {
 }
 
 android {
-    compileSdkVersion(31)
+    compileSdk = (findProperty("android.compileSdk") as String).toInt()
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
     defaultConfig {
-        minSdkVersion(24)
-        targetSdkVersion(31)
+        minSdk = (findProperty("android.minSdk") as String).toInt()
+        targetSdk = (findProperty("android.targetSdk") as String).toInt()
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
+    }
+    kotlin {
+        jvmToolchain(11)
     }
 }
