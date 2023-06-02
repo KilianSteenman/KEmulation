@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalUnsignedTypes::class)
+
 package com.kiliansteenman.kemulation.chip8
 
 import kotlinx.coroutines.GlobalScope
@@ -14,6 +16,10 @@ class Chip8(
     private val audio = Audio()
     private var runJob: Job? = null
 
+    private var _isRunning: Boolean = false
+    val isRunning: Boolean
+        get() = _isRunning
+
     private val cpu = Cpu(
         state = CpuState(),
         display = display,
@@ -28,6 +34,8 @@ class Chip8(
     }
 
     fun start() {
+        _isRunning = true
+
         runJob = GlobalScope.launch {
             while (true) {
                 delay(((1f / 60) * 100).toLong())

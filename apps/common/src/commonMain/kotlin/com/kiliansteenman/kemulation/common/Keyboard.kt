@@ -1,4 +1,4 @@
-package com.kiliansteenman.kemulation.android
+package com.kiliansteenman.kemulation.common
 
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
