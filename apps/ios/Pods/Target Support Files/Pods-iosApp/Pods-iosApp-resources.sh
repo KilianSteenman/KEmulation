@@ -97,10 +97,10 @@ EOM
   esac
 }
 if [[ "$CONFIGURATION" == "Debug" ]]; then
-  install_resource "${PODS_ROOT}/../../shared/src/commonMain/resources/compose-multiplatform.xml"
+  install_resource "${PODS_ROOT}/../../common/src/iosMain/resources/ibm.ch8"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
-  install_resource "${PODS_ROOT}/../../shared/src/commonMain/resources/compose-multiplatform.xml"
+  install_resource "${PODS_ROOT}/../../common/src/iosMain/resources/ibm.ch8"
 fi
 
 mkdir -p "${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}"

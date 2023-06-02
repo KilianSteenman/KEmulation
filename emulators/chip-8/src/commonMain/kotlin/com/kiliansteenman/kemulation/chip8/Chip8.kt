@@ -38,7 +38,7 @@ class Chip8(
 
         runJob = GlobalScope.launch {
             while (true) {
-                delay(((1f / 60) * 100).toLong())
+                delay(16)//((1f / 60) * 100).toLong())
                 cpu.executeProgram()
 
                 _pixels.emit(display.pixels.toList())
