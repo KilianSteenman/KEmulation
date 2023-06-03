@@ -1,4 +1,4 @@
-@file:OptIn(ExperimentalUnsignedTypes::class)
+@file:OptIn(ExperimentalUnsignedTypes::class, ExperimentalUnsignedTypes::class)
 
 import androidx.compose.material.Button
 import androidx.compose.material.Text
@@ -9,6 +9,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.WindowState
 import androidx.compose.ui.window.singleWindowApplication
 import com.kiliansteenman.kemulation.chip8.Chip8
+import com.kiliansteenman.kemulation.chip8.InputState
+import com.kiliansteenman.kemulation.common.KEmulationApp
+import com.kiliansteenman.kemulation.common.OnScreenKeyboard
 import java.awt.FileDialog
 import java.io.File
 
@@ -17,6 +20,7 @@ fun main(args: Array<String>) {
     val rom = if (romPath != null) loadRom(romPath) else null
 
     val keyboardInput = KeyboardInput()
+    val onScreenKeyboard = OnScreenKeyboard(InputState())
     val chip8 = Chip8(input = keyboardInput)
 
     if (rom != null) {
@@ -27,43 +31,25 @@ fun main(args: Array<String>) {
     }
 
     return singleWindowApplication(
-        state = WindowState(size = DpSize(640.dp, 320.dp)),
+        state = WindowState(size = DpSize(330.dp, 600.dp)),
         onKeyEvent = keyboardInput::processKeyEvent
     ) {
-        var file: UByteArray? by remember { mutableStateOf(rom) }
+        var isRunning by remember { mutableStateOf(false) }
 
-        if (file == null) {
-            FileSelection(window) { selectedFile ->
-                file = selectedFile
-                chip8.apply {
-                    loadRom(selectedFile)
-                    start()
-                }
+        KEmulationApp(chip8, onScreenKeyboard, isRunning) {
+            showFileDialog(window) { romFile ->
+                chip8.loadRom(romFile)
+                chip8.start()
+                isRunning = true
             }
-        } else {
-            Chip8Player(chip8)
         }
     }
 }
 
-@Composable
-fun FileSelection(window: ComposeWindow, onFileSelected: (UByteArray) -> Unit) {
-    Button(onClick = {
-        FileDialog(window).apply {
-            isVisible = true
-            onFileSelected(loadRom(File(directory, file).absolutePath))
-        }
-    }) {
-        Text("Select rom file")
-    }
-}
-
-@Composable
-fun Chip8Player(chip8: Chip8) {
-    val pixels = chip8.pixels.collectAsState(null)
-
-    pixels.value?.let {
-        MonochromeDisplay(pixels = it.toTypedArray())
+private fun showFileDialog(window: ComposeWindow, onFileSelected: (UByteArray) -> Unit) {
+    FileDialog(window).apply {
+        isVisible = true
+        onFileSelected(loadRom(File(directory, file).absolutePath))
     }
 }
 

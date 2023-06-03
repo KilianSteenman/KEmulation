@@ -6,6 +6,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
@@ -26,8 +27,8 @@ class Chip8(
         inputState = input.state
     )
 
-    private val _pixels = MutableStateFlow(display.pixels.toList())
-    val pixels: Flow<List<Boolean>> = _pixels
+    private val _pixels = MutableStateFlow(Pixels(display.pixels.toList()))
+    val pixels: Flow<Pixels> = _pixels
 
     fun loadRom(rom: UByteArray) {
         cpu.loadProgram(rom)
@@ -38,10 +39,10 @@ class Chip8(
 
         runJob = GlobalScope.launch {
             while (true) {
-                delay(16)//((1f / 60) * 100).toLong())
+                delay(16)
                 cpu.executeProgram()
 
-                _pixels.emit(display.pixels.toList())
+                _pixels.emit(Pixels(display.pixels.toList()))
 
                 // TODO: Play audio when audio flag is set
             }

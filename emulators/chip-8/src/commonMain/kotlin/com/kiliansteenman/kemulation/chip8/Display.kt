@@ -5,7 +5,7 @@ class Display(
     val height: Int
 ) {
 
-    val pixels = BooleanArray(width * height) { false }
+    val pixels = MutableList(width * height) { false }
 
     fun clear() {
         pixels.forEachIndexed { index, _ -> pixels[index] = false }

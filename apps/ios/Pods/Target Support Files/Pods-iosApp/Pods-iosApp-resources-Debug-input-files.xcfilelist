@@ -1,2 +1,3 @@
 ${PODS_ROOT}/Target Support Files/Pods-iosApp/Pods-iosApp-resources.sh
 ${PODS_ROOT}/../../common/src/iosMain/resources/ibm.ch8
+${PODS_ROOT}/../../common/src/iosMain/resources/pong.ch8

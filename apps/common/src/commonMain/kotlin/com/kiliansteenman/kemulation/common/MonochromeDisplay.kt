@@ -6,26 +6,27 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PointMode
+import com.kiliansteenman.kemulation.chip8.Pixels
 
 @Composable
 fun MonochromeDisplay(
-    pixels: Array<Boolean>,
+    pixels: Pixels,
     pixelColor: Color = Color.Black,
 ) {
+    println("Rendering")
     Canvas(
         modifier = Modifier.fillMaxWidth()
             .fillMaxHeight(0.5f)
     ) {
-        drawPoints(points = pixels.toOffsets(), pointMode = PointMode.Points, color = pixelColor, strokeWidth = 10f)
+        drawPoints(points = pixels.pixels.toOffsets(), pointMode = PointMode.Points, color = pixelColor, strokeWidth = 10f)
     }
 }
 
-private fun Array<Boolean>.toOffsets(): List<Offset> {
+private fun List<Boolean>.toOffsets(): List<Offset> {
     return this.mapIndexed { index, isEnabled ->
         Pair(index.toOffset(), isEnabled)
     }.filter { it.second }
         .map { it.first }
-        .toList()
 }
 
 fun Int.toOffset(): Offset {

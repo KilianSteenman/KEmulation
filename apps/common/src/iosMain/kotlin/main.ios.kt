@@ -1,4 +1,7 @@
-@file:OptIn(ExperimentalResourceApi::class, ExperimentalUnsignedTypes::class)
+@file:OptIn(
+    ExperimentalResourceApi::class, ExperimentalUnsignedTypes::class,
+    ExperimentalUnsignedTypes::class
+)
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -32,20 +35,25 @@ fun MainViewController() = ComposeUIViewController {
 
     KEmulationApp(chip8, onScreenKeyboard, isRunning) {
 //        showRomPicker()
-        runBlocking {
-            try {
-                val romFile = resource("ibm.ch8").readBytes().toUByteArray()
-                chip8.loadRom(romFile)
-                chip8.start()
-                isRunning = true
-            } catch(e : Exception) {
-                println("Error loading ibm.ch8 $e")
-            }
+        selectRom { romFile ->
+            chip8.loadRom(romFile)
+            chip8.start()
+            isRunning = true
         }
     }
 }
 
-private fun showRomPicker() {
+private fun selectRom(onRomSelected: (rom: UByteArray) -> Unit) {
+    runBlocking {
+        try {
+            onRomSelected(resource("pong.ch8").readBytes().toUByteArray())
+        } catch (e: Exception) {
+            println("Error loading ibm.ch8 $e")
+        }
+    }
+}
+
+private fun showRomPicker(onRomSelected: (rom: UByteArray) -> Unit) {
     val documentPicker = UIDocumentPickerViewController(
         documentTypes = emptyList<UTType>(),//listOf(UTType.typeWithFilenameExtension(filenameExtension = "ch8")),
         inMode = UIDocumentPickerMode.UIDocumentPickerModeOpen
