@@ -34,7 +34,6 @@ fun MainViewController() = ComposeUIViewController {
     var isRunning by remember { mutableStateOf(false) }
 
     KEmulationApp(chip8, onScreenKeyboard, isRunning) {
-//        showRomPicker()
         selectRom { romFile ->
             chip8.loadRom(romFile)
             chip8.start()
@@ -51,72 +50,4 @@ private fun selectRom(onRomSelected: (rom: UByteArray) -> Unit) {
             println("Error loading ibm.ch8 $e")
         }
     }
-}
-
-private fun showRomPicker(onRomSelected: (rom: UByteArray) -> Unit) {
-    val documentPicker = UIDocumentPickerViewController(
-        documentTypes = emptyList<UTType>(),//listOf(UTType.typeWithFilenameExtension(filenameExtension = "ch8")),
-        inMode = UIDocumentPickerMode.UIDocumentPickerModeOpen
-    )
-    documentPicker.delegate = object : NSObject(), UIDocumentPickerDelegateProtocol {
-        override fun `class`(): ObjCClass? {
-            TODO("Not yet implemented")
-        }
-
-        override fun conformsToProtocol(aProtocol: Protocol?): Boolean {
-            TODO("Not yet implemented")
-        }
-
-        override fun description(): String? {
-            TODO("Not yet implemented")
-        }
-
-        override fun hash(): NSUInteger {
-            TODO("Not yet implemented")
-        }
-
-        override fun isEqual(`object`: Any?): Boolean {
-            TODO("Not yet implemented")
-        }
-
-        override fun isKindOfClass(aClass: ObjCClass?): Boolean {
-            TODO("Not yet implemented")
-        }
-
-        override fun isMemberOfClass(aClass: ObjCClass?): Boolean {
-            TODO("Not yet implemented")
-        }
-
-        override fun isProxy(): Boolean {
-            TODO("Not yet implemented")
-        }
-
-        override fun performSelector(aSelector: COpaquePointer?, withObject: Any?): Any? {
-            TODO("Not yet implemented")
-        }
-
-        override fun performSelector(
-            aSelector: COpaquePointer?,
-            withObject: Any?,
-            _withObject: Any?
-        ): Any? {
-            TODO("Not yet implemented")
-        }
-
-        override fun performSelector(aSelector: COpaquePointer?): Any? {
-            TODO("Not yet implemented")
-        }
-
-        override fun respondsToSelector(aSelector: COpaquePointer?): Boolean {
-            TODO("Not yet implemented")
-        }
-
-        override fun superclass(): ObjCClass? {
-            TODO("Not yet implemented")
-        }
-    }
-
-    val window = UIApplication.sharedApplication.windows.last() as? UIWindow
-    val currentViewController = window?.rootViewController
-    currentViewController?.presentViewController(documentPicker, true) {}
 }
