@@ -9,18 +9,11 @@ plugins {
 group = "com.kiliansteenman.kemulation"
 version = "1.0.0"
 
-
 kotlin {
-    jvm {
-        compilations.all {
-            kotlinOptions.jvmTarget = "11"
-        }
-        withJava()
-    }
+    jvm {}
     sourceSets {
         val jvmMain by getting {
             dependencies {
-                implementation(project(":emulators:chip-8"))
                 implementation(project(":apps:common"))
                 implementation(compose.desktop.currentOs)
             }
