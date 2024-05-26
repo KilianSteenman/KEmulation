@@ -13,7 +13,6 @@ fun MonochromeDisplay(
     pixels: Pixels,
     pixelColor: Color = Color.Black,
 ) {
-    println("Rendering")
     Canvas(
         modifier = Modifier.fillMaxWidth()
             .fillMaxHeight(0.5f)

@@ -39,6 +39,8 @@ class Cpu(
     private val rng: Random = Random.Default
 ) {
 
+    private val logger = FileLogger("log")
+
     init {
         font.copyInto(state.memory, FONT_OFFSET.toInt())
     }
@@ -51,6 +53,7 @@ class Cpu(
 
     fun executeProgram() {
         val opcode = getOpcode()
+        println("Opcode ${opcode.toUShort().toString(16)}")
         state.increaseProgramCounter()
         executeOpcode(opcode)
         if (state.delayTimer > 0.toUByte()) {
@@ -59,6 +62,8 @@ class Cpu(
         if (state.soundTimer > 0.toUByte()) {
             state.soundTimer--
         }
+
+//        logger.log("${state.programCounter}, ${state.index} Timer[${state.delayTimer}, ${state.soundTimer}], Reg[${state.registers[0]} ${state.registers[1]} ${state.registers[2]} ${state.registers[3]} ${state.registers[4]} ${state.registers[5]} ${state.registers[6]} ${state.registers[7]} ${state.registers[8]} ${state.registers[9]} ${state.registers[10]} ${state.registers[11]} ${state.registers[12]} ${state.registers[13]} ${state.registers[14]} ${state.registers[15]}]")
     }
 
     private fun getOpcode(): Short {
@@ -116,12 +121,15 @@ class Cpu(
     }
 
     private fun opcode00EE(opcode: Short) {
-        state.setProgramCounter(state.stack.removeFirst())
+        state.setProgramCounter(state.stack.removeFirst()).also {
+            println("Popping ${state.programCounter} at stack index ${state.stack.lastIndex}")
+        }
     }
 
     private fun opcode2XXX(opcode: Short) {
         state.stack.addFirst(state.programCounter)
         state.setProgramCounter(opcode.and(0x0FFF))
+        println("Pushing ${state.stack.first()} at stack index ${state.stack.lastIndex}")
     }
 
     private fun opcodeFXXX(opcode: Short) {
@@ -266,10 +274,13 @@ class Cpu(
                     }
 
                     display.pixels[pixelIndex] = display.pixels[pixelIndex].xor(true)
+//                    logger.log("[$pixelIndex] ${if(display.pixels[pixelIndex]) 1 else 0} ($xOffset,$yOffset)")
                 }
                 sprite = sprite.toUInt().shl(1).toUByte()
             }
         }
+
+//        logger.log(display.pixels.map { if(it) 1 else 0 }.joinToString(""))
     }
 
     private fun opcodeEX9E(opcode: Short) {

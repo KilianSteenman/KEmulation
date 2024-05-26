@@ -113,6 +113,9 @@ gradle-app.setting
 # Cache of project
 .gradletasknamecache
 
+# Xcode
+**/xcuserdata/*
+
 # Roms
 *.ch8
 *.rom
