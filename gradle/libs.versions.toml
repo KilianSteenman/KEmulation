@@ -1,0 +1,15 @@
+[versions]
+kotlin = "1.9.24"
+androidGradlePlugin = "8.3.0"
+composePlugin = "1.6.10"
+
+[libraries]
+
+[plugins]
+jetbrains-compose = { id = "org.jetbrains.compose", version.ref = "composePlugin" }
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+#compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "composePlugin" }
+android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
+android-library = { id = "com.android.library", version.ref = "androidGradlePlugin" }
