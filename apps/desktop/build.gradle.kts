@@ -2,8 +2,8 @@ import org.jetbrains.compose.compose
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 
 plugins {
-    kotlin("multiplatform")
-    id("org.jetbrains.compose")
+    alias(libs.plugins.kotlin.multiplatform)
+    alias(libs.plugins.jetbrains.compose)
 }
 
 group = "com.kiliansteenman.kemulation"
@@ -12,13 +12,10 @@ version = "1.0.0"
 kotlin {
     jvm {}
     sourceSets {
-        val jvmMain by getting {
-            dependencies {
-                implementation(project(":apps:common"))
-                implementation(compose.desktop.currentOs)
-            }
+        jvmMain.dependencies {
+            implementation(project(":apps:common"))
+            implementation(compose.desktop.currentOs)
         }
-        val jvmTest by getting
     }
 }
 
