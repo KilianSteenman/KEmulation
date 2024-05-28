@@ -9,9 +9,9 @@
 /* Begin PBXAggregateTarget section */
 		8217FBB9D1218C346C0781D0B8F2BBE8 /* common */ = {
 			isa = PBXAggregateTarget;
-			buildConfigurationList = EBEA031CCF6C0743DF0A18F694316B18 /* Build configuration list for PBXAggregateTarget "common" */;
+			buildConfigurationList = ED8A010D43CC7046C1706F9DF5573F94 /* Build configuration list for PBXAggregateTarget "common" */;
 			buildPhases = (
-				848BBEF40CBE602C8E865DE85AC1DA34 /* [CP-User] Build common */,
+				892BDA89397BCDA50193B7A4CDFAE616 /* [CP-User] Build common */,
 			);
 			dependencies = (
 			);
@@ -241,7 +241,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		848BBEF40CBE602C8E865DE85AC1DA34 /* [CP-User] Build common */ = {
+		892BDA89397BCDA50193B7A4CDFAE616 /* [CP-User] Build common */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -249,7 +249,7 @@
 			name = "[CP-User] Build common";
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "                if [ \"YES\" = \"$OVERRIDE_KOTLIN_BUILD_IDE_SUPPORTED\" ]; then\n                  echo \"Skipping Gradle build task invocation due to OVERRIDE_KOTLIN_BUILD_IDE_SUPPORTED environment variable set to \"YES\"\"\n                  exit 0\n                fi\n                set -ev\n                REPO_ROOT=\"$PODS_TARGET_SRCROOT\"\n                \"$REPO_ROOT/../../../../../../../private/var/folders/t2/g90j4tkn30788tlnsgnq73tw0000gn/T/wraploc/gradlew\" -p \"$REPO_ROOT\" $KOTLIN_PROJECT_PATH:syncFramework                     -Pkotlin.native.cocoapods.platform=$PLATFORM_NAME                     -Pkotlin.native.cocoapods.archs=\"$ARCHS\"                     -Pkotlin.native.cocoapods.configuration=\"$CONFIGURATION\"\n";
+			shellScript = "                if [ \"YES\" = \"$OVERRIDE_KOTLIN_BUILD_IDE_SUPPORTED\" ]; then\n                  echo \"Skipping Gradle build task invocation due to OVERRIDE_KOTLIN_BUILD_IDE_SUPPORTED environment variable set to \"YES\"\"\n                  exit 0\n                fi\n                set -ev\n                REPO_ROOT=\"$PODS_TARGET_SRCROOT\"\n                \"$REPO_ROOT/../../gradlew\" -p \"$REPO_ROOT\" $KOTLIN_PROJECT_PATH:syncFramework                     -Pkotlin.native.cocoapods.platform=$PLATFORM_NAME                     -Pkotlin.native.cocoapods.archs=\"$ARCHS\"                     -Pkotlin.native.cocoapods.configuration=\"$CONFIGURATION\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -311,7 +311,7 @@
 			};
 			name = Debug;
 		};
-		27BF2EA687D4806605BB14CA9F86050F /* Release */ = {
+		285E22E2D240736C83FBD2A098D5F9FF /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 5322F4D58F773B8686AB4E3C7D1175E0 /* common.release.xcconfig */;
 			buildSettings = {
@@ -495,7 +495,7 @@
 			};
 			name = Debug;
 		};
-		B7C23FF6C31AC7F75F1E66892737A38B /* Debug */ = {
+		FFFDE4601A89FD3FBAF8ED1991835A52 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 66CB301C7AFFA80B04FF8C97876B8394 /* common.debug.xcconfig */;
 			buildSettings = {
@@ -533,11 +533,11 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		EBEA031CCF6C0743DF0A18F694316B18 /* Build configuration list for PBXAggregateTarget "common" */ = {
+		ED8A010D43CC7046C1706F9DF5573F94 /* Build configuration list for PBXAggregateTarget "common" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				B7C23FF6C31AC7F75F1E66892737A38B /* Debug */,
-				27BF2EA687D4806605BB14CA9F86050F /* Release */,
+				FFFDE4601A89FD3FBAF8ED1991835A52 /* Debug */,
+				285E22E2D240736C83FBD2A098D5F9FF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

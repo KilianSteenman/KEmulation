@@ -6,7 +6,7 @@ include(
     "apps:android",
     "apps:common",
     "apps:desktop",
-    "apps:web",
+//    "apps:web",
 )
 
 pluginManagement {
