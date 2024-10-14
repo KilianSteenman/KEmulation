@@ -4,7 +4,7 @@ appcompat = "1.7.0"
 coreKtx = "1.13.1"
 kotlin = "2.0.21"
 androidGradlePlugin = "8.6.1"
-composePlugin = "1.6.11"
+composePlugin = "1.7.0+build1877-release-1.7"
 kotlinxCoroutinesCore = "1.9.0"
 
 [libraries]
