@@ -1,7 +1,7 @@
 [versions]
 activityCompose = "1.9.3"
 appcompat = "1.7.0"
-coreKtx = "1.13.1"
+coreKtx = "1.15.0"
 kotlin = "2.0.21"
 androidGradlePlugin = "8.6.1"
 composePlugin = "1.7.0+"
